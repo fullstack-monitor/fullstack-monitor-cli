@@ -42,8 +42,13 @@ module.exports = {
       {
         test: /\.(jpe?g|png|gif)$/i,
         loader: "file-loader"
-    },
-      
+      },
+      {
+        loader: 'eslint-loader',
+        options: {
+          fix: true
+        }
+      },
     ],
   },
   

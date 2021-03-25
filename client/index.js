@@ -3,9 +3,10 @@ import { render } from 'react-dom';
 import App from './components/App';
 
 // uncomment so that webpack can bundle styles
-import styles from './scss/application.scss';
+/* eslint-disable no-unused-vars */
+import './scss/application.scss';
 
 render(
   <App />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
