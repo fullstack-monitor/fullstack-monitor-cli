@@ -1,6 +1,6 @@
-import { ThemeProvider } from '@chakra-ui/core';
 import React from 'react';
 import { render } from 'react-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 import App from './components/App';
 
 // uncomment so that webpack can bundle styles
@@ -8,8 +8,8 @@ import App from './components/App';
 import './scss/application.scss';
 
 render(
-  <ThemeProvider>
+  <ChakraProvider>
     <App />
-  </ThemeProvider>,
+  </ChakraProvider>,
   document.getElementById('root'),
 );
