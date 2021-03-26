@@ -8,7 +8,7 @@ import App from './components/App';
 import './scss/application.scss';
 
 render(
-  <ChakraProvider className="Test">
+  <ChakraProvider>
     <App />
   </ChakraProvider>,
   document.getElementById('root'),
