@@ -16,6 +16,7 @@ app.use('/api', apiRouter);
 app.get('/', (req, res) => res.status(200).sendFile(path.join(__dirname, '../index.html')));
 
 // global error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
