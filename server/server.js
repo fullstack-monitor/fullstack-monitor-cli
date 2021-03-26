@@ -1,43 +1,33 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-// const port = process.env.port || 3000;
-const port = process.env.port || 5555;
 const apiRouter = require('./routes/api');
 
+const app = express();
+const port = process.env.port || 5555;
 
 app.use(express.json());
-
-
 
 // statically serve everything in the build folder on the route '/build'
 app.use('/build', express.static(path.join(__dirname, '../build')));
 
 app.use('/api', apiRouter);
 
-
 // serve index.html on the route '/'
-// if (process.env.NODE_ENV === 'production') {
 app.get('/', (req, res) => res.status(200).sendFile(path.join(__dirname, '../index.html')));
 
-/* GET React App */
-// app.use(function(req, res, next) {
-//   res.sendFile(path.join(__dirname, '../index.html'));
-//  });
-
-//global error handler
+// global error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
     message: { err: 'An error occurred' },
   };
-  const errorObj = Object.assign({}, defaultErr, err);
-  console.log(errorObj.log);
+  const errorObj = { ...defaultErr, ...err };
   return res.status(errorObj.status).json(errorObj.message);
 });
 
+// listens on port 3000 -> http://localhost:3000/
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`App listening on port: ${port}`);
-}); //listens on port 3000 -> http://localhost:3000/
-
+});
