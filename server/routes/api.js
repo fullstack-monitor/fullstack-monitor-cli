@@ -1,15 +1,11 @@
 const express = require('express');
-const path = require('path');
 
-
-const exampleController = require('../controllers/exampleController');
+const loggerController = require('../controllers/loggerController');
 
 const router = express.Router();
 
-
 router.get('/',
-  exampleController.getExample,    
-  (req,res) => res.status(200).json('hello world')
-);
+  loggerController.getLogs,
+  (req, res) => res.status(200).json(res.locals.logs));
 
 module.exports = router;
