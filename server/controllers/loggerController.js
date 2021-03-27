@@ -45,6 +45,7 @@ loggerController.getLogs = (req, res, next) => {
 
   requests.filter((el) => res.locals.logs.allLogs.push({
     class: 'response',
+    timestamp: el.timestamp,
     fromIP: el.fromIP,
     responseData: el.responseData,
     responseStatus: el.responseStatus,

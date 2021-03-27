@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import "../index.css";
 import { io } from "socket.io-client";
 import Log from './Log';
-// const socket = io();
+import Request from './Request';
+import Response from './Response';
 import {
   Table,
   Thead,
@@ -47,8 +48,8 @@ class App extends Component {
     console.log(`this.state.logs`, this.state.logs);
     return (
       <div>
-        <Button onClick={this.sendWSMessageArrow}>Yo Arrow</Button>
-        Hello World
+        {/* <Button onClick={this.sendWSMessageArrow}>Yo Arrow</Button>
+        Hello World */}
         <Table variant="simple">
         <TableCaption>Ultimate Logger</TableCaption>
         <Thead>
@@ -59,7 +60,6 @@ class App extends Component {
             <Th>Log</Th>
           </Tr>
         </Thead>
-        
         <Tbody>
             {
               logs.map(log => {
@@ -68,24 +68,13 @@ class App extends Component {
                     return <Log log={log} />
                   case 'server':
                     return <Log log={log} />
-                  // case 'request':
-                  //   return <li>{log.method}</li>
-                  // case 'response':
-                  //   return <li>Response{log.responseData}</li>
+                  case 'request':
+                    return <Request request={log} />
+                  case 'response':
+                    return <Response response={log} />
                 }
               })
             }
-          
-          {/* <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
-          </Tr> */}
         </Tbody>
         <Tfoot>
           <Tr>
