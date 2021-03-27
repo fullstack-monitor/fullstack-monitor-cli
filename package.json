@@ -19,13 +19,10 @@
   "author": "CodesmithLLC https://github.com/CodesmithLLC <hello@codesmith.io>",
   "license": "ISC",
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
     "@chakra-ui/react": "^1.4.1",
-    "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "body-parser": "^1.19.0",
-    "emotion-theming": "^11.0.0",
     "express": "^4.12.3",
     "file-loader": "^6.2.0",
     "framer-motion": "^4.0.3",
