@@ -4,10 +4,11 @@ const path = require('path');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const { serverPort } = require('../config');
 
 const apiRouter = require('./routes/api');
 
-const port = process.env.port || 3861;
+const port = process.env.port || serverPort;
 
 app.use(express.json());
 
