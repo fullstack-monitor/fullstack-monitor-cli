@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run start\" \"npm run react\"",
-    "start": "nodemon Server/index.js",
+    "start": "nodemon server/index.js",
     "react": "webpack serve --env NODE_ENV=development --mode development",
     "build": "npx webpack --config webpack.config.js",
     "test": "jest"
