@@ -1,8 +1,13 @@
 const express = require('express');
+const { io } = require('../index');
 
 const loggerController = require('../controllers/loggerController');
 
 const router = express.Router();
+
+const webSocketMiddleware = () => {
+  io.emit('chat message', 'sending databack');
+};
 
 router.get('/logs',
   loggerController.getLogs,
