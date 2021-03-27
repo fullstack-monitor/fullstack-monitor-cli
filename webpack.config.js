@@ -1,69 +1,73 @@
-const path = require('path');
+const path = require('path')
+const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
-  entry: './client/index.js',
-  output: {
-    path: path.resolve(__dirname, 'build'),
-    publicPath: '/build',
-    filename: 'bundle.js',
-  },
-  
-  mode: process.env.NODE_ENV,
-  devServer: {
-    publicPath: '/build',
-    proxy: {
-      '/api': 'http://localhost:5555',
-    }
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-          },
-        },
-      },
-      {
-        test: /\.s[ac]ss$/i,        
-        use: [      
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
-          'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
-        ], 
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/i,
-        loader: "file-loader"
-      },
-      {
-        loader: 'eslint-loader',
-        options: {
-          fix: true
-        }
-      },
+module.exports = env => {
+  const devMode = env.NODE_ENV !== 'production';
+
+  return {
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].bundle.css',
+        chunkFilename: '[id].css'
+      }),
+      new webpack.HotModuleReplacementPlugin()
     ],
-  },
-  
-  
-  resolve: {
-    // Enable importing JS / JSX files without specifying their extension
-    extensions: ['.js', '.jsx'],
-  },
-
-  node:{
-    console: true,
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    
+    entry: path.resolve(__dirname, 'src', 'index.js'),
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js'
+    },
+    devServer: {
+      contentBase: path.resolve(__dirname, 'dist'),
+      open: true,
+      clientLogLevel: 'silent',
+      port: 4732,
+      historyApiFallback: true,
+      hot: true,
+      proxy: { "/**": { target: 'http://localhost:3861', secure: false }  }
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(jsx|js)$/,
+          include: path.resolve(__dirname, 'src'),
+          exclude: /node_modules/,
+          use: [{
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['@babel/preset-env', {
+                  "targets": "defaults" 
+                }],
+                '@babel/preset-react'
+              ]
+            }
+          }, {
+            loader: 'eslint-loader',
+            options: {
+              fix: true
+            }
+          }]
+        },
+        {
+          test: /\.css$/i,
+          include: path.resolve(__dirname, 'src'),
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1 
+              }
+            },
+            'postcss-loader'
+          ]
+        }
+      ]
+    }
   }
-};
-
+} 

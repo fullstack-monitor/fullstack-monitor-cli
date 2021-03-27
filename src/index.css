@@ -1,0 +1,7 @@
+* {
+  background:lightblue; 
+}
+
+::placeholder {
+  color: gray;
+}

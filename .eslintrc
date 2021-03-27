@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb"],
+  "ignorePatterns": ["webpack.config.js", "postcss.config.js"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": 0,
+    "react/prop-types": 0,
+    "no-console": 0,
+    "quotes": 0,
+    "camelcase": 0,
+    "comma-dangle": 0,
+    "no-plusplus": 0,
+    "no-restricted-syntax": 0
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  }
+}
