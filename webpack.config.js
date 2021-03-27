@@ -26,19 +26,13 @@ module.exports = env => {
       port: 4732,
       historyApiFallback: true,
       hot: true,
-      // secure: false,
-      // changeOrigin: true,
-      // proxy: { "/**": { target: `http://localhost:${serverPort}`, secure: false }  }
-      proxy: { "/**": 
+      proxy: { "*": 
         {
-          target: `http://127.0.0.1:${serverPort}`,
-          // target: `http://[::1]:${serverPort}`,
-          // target: `http://localhost:${serverPort}`,
+          target: `http://[::1]:${serverPort}`,
           secure: false,
           changeOrigin: true
         } 
       }
-      // proxy: { "*": { target: `http://[::1]:${serverPort}`, secure: false }  }
     },
     module: {
       rules: [
