@@ -12,4 +12,8 @@ router.post('/logs/:type',
   loggerController.addLogs,
   (req, res) => res.status(200).json(`Added ${req.params.type} logs`));
 
+router.post('/requests',
+  loggerController.addRequests,
+  (req, res) => res.status(200).json('Requests added!'));
+
 module.exports = router;
