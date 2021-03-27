@@ -52,6 +52,6 @@ http.listen(port, () => {
   console.log(`App listening on port: ${port}`);
 });
 
-module.exports = {
-  io
-};
+// module.exports = {
+//   io
+// };
