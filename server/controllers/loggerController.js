@@ -16,22 +16,25 @@ loggerController.getLogs = (req, res, next) => {
   }
 
   res.locals.logs = {
-    serverLogs: [], clientLogs: [], request: [], response: []
+    allLogs: []
   };
 
-  clientLogs.filter((el) => res.locals.logs.clientLogs.push({
+  clientLogs.filter((el) => res.locals.logs.allLogs.push({
+    class: 'client',
     type: el.type,
     timestamp: el.timestamp,
     log: el.arguments[0],
   }));
 
-  serverLogs.filter((el) => res.locals.logs.serverLogs.push({
+  serverLogs.filter((el) => res.locals.logs.allLogs.push({
+    class: 'server',
     type: el.type,
     timestamp: el.timestamp,
     log: el.arguments[0],
   }));
 
-  requests.filter((el) => res.locals.logs.request.push({
+  requests.filter((el) => res.locals.logs.allLogs.push({
+    class: 'request',
     timestamp: el.timestamp,
     method: el.method,
     originalUri: el.originalUri,
@@ -40,7 +43,9 @@ loggerController.getLogs = (req, res, next) => {
     referer: el.referer,
   }));
 
-  requests.filter((el) => res.locals.logs.response.push({
+  requests.filter((el) => res.locals.logs.allLogs.push({
+    class: 'response',
+    timestamp: el.timestamp,
     fromIP: el.fromIP,
     responseData: el.responseData,
     responseStatus: el.responseStatus,
