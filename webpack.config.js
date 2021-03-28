@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { serverPort } = require('./config.js');
 
 module.exports = env => {
   const devMode = env.NODE_ENV !== 'production';
@@ -25,7 +26,13 @@ module.exports = env => {
       port: 4732,
       historyApiFallback: true,
       hot: true,
-      proxy: { "/**": { target: 'http://localhost:3861', secure: false }  }
+      proxy: { "*": 
+        {
+          target: `http://[::1]:${serverPort}`,
+          secure: false,
+          changeOrigin: true
+        } 
+      }
     },
     module: {
       rules: [
