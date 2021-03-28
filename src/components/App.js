@@ -17,19 +17,18 @@ import {
   Button
 } from "@chakra-ui/react";
 
-// {transports: ['websocket']}
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      socket: io(),
+      socket: io('http://localhost:3861/', {transports: ['websocket']}),
       logs: []
     }
   }
   componentDidMount() {
     this.state.socket.on("chat message", (msg) => {
       console.log("recieved message from server: ", msg);
+      this.setState({logs: msg.allLogs});
     });
     fetch('/api/logs')
       .then(res => res.json())
@@ -48,8 +47,7 @@ class App extends Component {
     console.log(`this.state.logs`, this.state.logs);
     return (
       <div>
-        {/* <Button onClick={this.sendWSMessageArrow}>Yo Arrow</Button>
-        Hello World */}
+        {/* <Button onClick={this.sendWSMessageArrow}>Yo Arrow</Button> */}
         <Table variant="simple">
         <TableCaption>Ultimate Logger</TableCaption>
         <Thead>
