@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-
+const cors = require('cors')
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -8,7 +8,7 @@ const io = require('socket.io')(http);
 const apiRouter = require('./routes/api');
 
 const port = process.env.port || 3861;
-
+app.use(cors())
 app.use(express.json());
 
 const DIST_DIR = path.join(__dirname, '../dist'); // NEW

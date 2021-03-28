@@ -43,7 +43,7 @@ loggerController.addLogs = (req, res, next) => {
       message: { err: 'Error occurred in loggerController.addSeverLogs. Check server logs for more details.' },
     });
   }
-  fs.readFile(path.resolve(__dirname, `../data/${type}Logs.json`), 'utf8', (err, data) => {
+  fs.readFileSync(path.resolve(__dirname, `../data/${type}Logs.json`), 'utf8', (err, data) => {
     if (err) {
       return next({
         log: 'loggerController.addSeverLogs:  ERROR: Error reading existing severLogs data from serverLogs.json file',
