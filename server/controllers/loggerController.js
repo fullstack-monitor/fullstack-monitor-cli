@@ -6,52 +6,18 @@ const loggerController = {};
 // middleware to get all type of logs
 loggerController.getLogs = (req, res, next) => {
   // read all logs from saved files
-  const clientLogs = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/clientLogs.json'), 'UTF-8'));
-  const serverLogs = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/serverLogs.json'), 'UTF-8'));
-  const requests = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/request.json'), 'UTF-8'));
+  // eslint-disable-next-line global-require
+  const logs = require('../data/allLogs.json');
 
-  if (!clientLogs || !serverLogs) {
+  if (!logs) {
     return next({
-      log: 'loggerController.getLogs:  ERROR: Error getting logs data from clientLogs.json and/or serverLog.json file',
+      log: 'loggerController.getLogs:  ERROR: Error getting logs data from allLogs.json file',
       message: { err: 'Error occurred in loggerController.getLogs. Check server logs for more details.' },
     });
   }
 
-  res.locals.logs = {
-    allLogs: []
-  };
-
-  clientLogs.filter((el) => res.locals.logs.allLogs.push({
-    class: 'client',
-    type: el.type,
-    timestamp: el.timestamp,
-    log: el.arguments[0],
-  }));
-
-  serverLogs.filter((el) => res.locals.logs.allLogs.push({
-    class: 'server',
-    type: el.type,
-    timestamp: el.timestamp,
-    log: el.arguments[0],
-  }));
-
-  requests.filter((el) => res.locals.logs.allLogs.push({
-    class: 'request',
-    timestamp: el.timestamp,
-    method: el.method,
-    originalUri: el.originalUri,
-    uri: el.uri,
-    requestData: el.requestData,
-    referer: el.referer,
-  }));
-
-  requests.filter((el) => res.locals.logs.allLogs.push({
-    class: 'response',
-    timestamp: el.timestamp,
-    fromIP: el.fromIP,
-    responseData: el.responseData,
-    responseStatus: el.responseStatus,
-  }));
+  // assign logs into res.locals.logs
+  res.locals.logs = { allLogs: logs };
 
   return next();
 };
@@ -127,79 +93,36 @@ loggerController.getSpecificLog = (req, res, next) => {
 // middleware to add client and server console log to files
 loggerController.addLogs = (req, res, next) => {
   // assign request type from req.params to type
+  console.log(req.params);
   const { type } = req.params;
 
   // assign incoming req.body to logs variable
   const logs = req.body;
 
-  // create an emtpy object to hold all the existing json elements
-  let obj = {
-    table: [],
-  };
-
   // error handling for if there's no data in req.body
   if (!logs) {
     return next({
-      log: 'loggerController.addSeverLogs:  ERROR: Error receiving severLogs data from Application',
-      message: { err: 'Error occurred in loggerController.addSeverLogs. Check server logs for more details.' },
-    });
-  }
-
-  // read the existing logs from  json file
-  fs.readFile(path.resolve(__dirname, `../data/${type}Logs.json`), 'utf-8', (err, data) => {
-    // error handling for reading  the existing file
-    if (err) {
-      obj = [];
-    } else {
-      // save all the existing data to exmpty obj
-      obj = JSON.parse(data);
-    }
-
-    // push the new incoming request data to obj
-    obj.push(logs);
-
-    // write object obj that hold all existing data and new requests to request_response json file
-    fs.writeFileSync(path.resolve(__dirname, `../data/${type}Logs.json`), JSON.stringify(obj, null, 2), 'UTF-8');
-    return next();
-  });
-  return next();
-};
-
-// middleware to add request/respond logs to file
-loggerController.addRequests = (req, res, next) => {
-  // assign incoming req.body to request variable
-  const requests = req.body;
-
-  // create an emtpy object to hold all the existing json elements
-  const obj = {
-    table: [],
-  };
-
-  // if incoming request body is null value, return an error
-  if (!requests) {
-    return next({
-      log: 'loggerController.addRequests: ERROR: Error receiving Requests data from Application',
-      message: { err: 'Error occurred in loggerController.addRequests. Check server logs for more details.' },
+      log: `loggerController.addSeverLogs:  ERROR: Error receiving  ${type} data from Application`,
+      message: { err: 'Error occurred in loggerController.addLogs. Check server logs for more details.' },
     });
   }
 
   // read the existing request_respose json file
   // eslint-disable-next-line global-require
-  const data = require('../data/request.json');
+  const data = require('../data/allLogs.json');
 
   // push new requests into data
-  data.push(requests);
+  data.push(logs);
 
   // write data that holds existing requests and new request to request.json
-  fs.writeFileSync(path.resolve(__dirname, '../data/request.json'), JSON.stringify(data, null, 2), 'UTF-8');
+  fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify(data, null, 2), 'UTF-8');
+
   return next();
 };
 
 // middleware to delete json files
 loggerController.deleteLogs = (req, res, next) => {
-  fs.writeFileSync(path.resolve(__dirname, '../data/request.json'), JSON.stringify([]), 'UTF-8');
-  fs.writeFileSync(path.resolve(__dirname, '../data/serverLogs.json'), JSON.stringify([]), 'UTF-8');
-  fs.writeFileSync(path.resolve(__dirname, '../data/clientLogs.json'), JSON.stringify([]), 'UTF-8');
+  fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'UTF-8');
   return next();
 };
 
@@ -208,7 +131,7 @@ loggerController.checkLogFiles = (req, res, next) => {
   const { type } = req.params;
 
   // check the file already exist
-  fs.access(path.resolve(__dirname, `../data/${type}Logs.json`), (err) => {
+  fs.access(path.resolve(__dirname, '../data/allLogs.json'), (err) => {
     // if there's error write the file
     if (err) {
       fs.writeFileSync(path.resolve(__dirname, `../data/${type}Logs.json`), JSON.stringify([]), 'UTF-8');
