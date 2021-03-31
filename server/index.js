@@ -17,9 +17,7 @@ app.use(express.json());
 const DIST_DIR = path.join(__dirname, "../dist"); // NEW
 const HTML_FILE = path.join(DIST_DIR, "index.html"); // NEW
 
-// // statically serve everything in the build folder on the route '/build'
-// // app.use('/build', express.static(path.join(__dirname, '../build')));
-// app.use('/build', express.static(path.join(__dirname, DIST_DIR)));
+// // statically serve everything in the dist folder on the route '/dist'
 app.use(express.static(DIST_DIR)); // NEW
 app.use(cors());
 
@@ -53,6 +51,7 @@ io.on("connection", (socket) => {
       allLogs: await storeLogs(logs)
     };
     io.emit('display-logs', data);
+    io.emit('store-logs', 'success');
   });
 });
 
