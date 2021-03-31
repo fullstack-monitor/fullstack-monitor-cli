@@ -2,7 +2,7 @@
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
-const { handleSockets } = require('./sockets/sockets');
+const socketRouter = require('./routes/api');
 
 const {
   serverPort, app, http,
@@ -10,8 +10,8 @@ const {
 
 const port = process.env.port || serverPort;
 
-// Handle sockets
-handleSockets();
+// Setup sockets router
+socketRouter();
 
 app.use(express.json());
 
@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-// listens on port 3000 -> http://localhost:3000/
+// listens on port -> http://localhost:${port}/
 http.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`App listening on port: ${port}`);
