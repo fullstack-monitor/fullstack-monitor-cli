@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { getAllLogs } = require('../helpers/helpers');
 
 let data;
 
@@ -8,7 +9,7 @@ const loggerController = {};
 // middleware to get all type of logs
 loggerController.getLogs = async (req, res, next) => {
   // read all logs from saved files
-  const logs = await JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/allLogs.json'), 'utf8'));
+  const logs = await getAllLogs();
 
   if (!logs) {
     return next({

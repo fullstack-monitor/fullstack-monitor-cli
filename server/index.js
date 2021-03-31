@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
+const { getAllLogs } = require('./helpers/helpers');
 
 const {
   serverPort, app, http, io,
@@ -41,10 +42,14 @@ app.use((err, req, res, next) => {
 
 io.on("connection", (socket) => {
   console.log("connected");
-  socket.on("chat message", (msg) => {
-    console.log("received from client: ", msg);
-    // io.emit('chat message', msg);
-    // io.emit("chat message", "hi from server");
+  socket.on('get initial logs', async () => {
+    const data = {
+      allLogs: await getAllLogs()
+    };
+    io.emit('display-logs', data);
+  });
+  socket.on("store-logs", (logsObj) => {
+    // storeLogs(logsObj.class, logsObj.logs, io);
   });
 });
 
