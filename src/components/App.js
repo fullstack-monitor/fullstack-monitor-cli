@@ -16,12 +16,13 @@ import {
   TableCaption,
   Button
 } from "@chakra-ui/react";
+import { serverPort } from '../../configConstants';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      socket: io('http://localhost:3861/', {transports: ['websocket']}),
+      socket: io(`http://localhost:${serverPort}/`, {transports: ['websocket']}),
       logs: []
     }
   }
