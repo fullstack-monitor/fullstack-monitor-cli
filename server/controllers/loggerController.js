@@ -1,30 +1,29 @@
-const fs = require('fs');
-const path = require('path');
-const { getAllLogs, storeLogs } = require('../helpers/helpers');
-
-let data;
+const { getAllLogs, storeLogs, deleteLogs } = require('../helpers/helpers');
+const { io } = require("../../config");
 
 const loggerController = {};
 
-// middleware to delete json files
-loggerController.deleteLogs = (req, res, next) => {
-  fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'utf8');
-  return next();
+loggerController.getAllLogs = async () => {
+  // Get all the logs
+  const data = { allLogs: await getAllLogs() };
+  // Send them to the FE
+  io.emit('display-logs', data);
 };
 
-// middleware to check alllLogs.json file is existed
-loggerController.checkLogFile = (req, res, next) => {
-  // check the file already exist
-  fs.access(path.resolve(__dirname, '../data/allLogs.json'), (err) => {
-    // if there's error write the file
-    if (err) {
-      fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'utf8');
-      return next();
-    }
+loggerController.storeLogs = async (logs) => {
+  // Store the new logs
+  const data = { allLogs: await storeLogs(logs) };
+  // Send the new logs to the FE
+  io.emit('display-logs', data);
+  // Let users project know logs have been successfully stored
+  io.emit('store-logs', 'success');
+};
 
-    // if there's no error
-    return next();
-  });
+loggerController.deleteLogs = async () => {
+  // Delete the logs
+  const data = { allLogs: await deleteLogs() };
+  // Update the FE accordingly
+  io.emit('display-logs', data);
 };
 
 module.exports = loggerController;
