@@ -18,6 +18,8 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+cursor.bg.black();
+
 socket.on("print-logs", (data) => {
   if (Array.isArray(data)) {
     if (data[0]) {
@@ -27,11 +29,11 @@ socket.on("print-logs", (data) => {
         class: classType,
         originalUri,
         requestData,
-        fromIP
+        fromIP,
       } = data[0];
 
-      cursor.fg
-        .green()
+      cursor
+        .fg.brightGreen()
         .underline()
         .write(`[${timestamp}]`)
         .resetUnderline()
@@ -48,7 +50,7 @@ socket.on("print-logs", (data) => {
         .write(" \n")
         .write(`Response Data: `)
         .bold()
-        .write(`${requestData || 'none'}`)
+        .write(`${requestData || "none"}`)
         .resetBold()
         .write(" \n")
         .write(`From IP: `)
@@ -65,11 +67,11 @@ socket.on("print-logs", (data) => {
         timestamp,
         class: classType,
         responseStatus,
-        referer
+        referer,
       } = data[1];
 
-      cursor.fg
-        .brightMagenta()
+      cursor
+        .fg.brightMagenta()
         .underline()
         .write(`[${timestamp}]`)
         .resetUnderline()
@@ -86,32 +88,46 @@ socket.on("print-logs", (data) => {
         .write(" \n")
         .write(`Response Data: `)
         .bold()
-        .write(`${responseData || 'none'}`)
+        .write(`${responseData || "none"}`)
         .resetBold()
         .write(" \n")
         .fg.reset();
     }
   } else {
-    // cursor.fg
-    //   .brightMagenta()
-    //   .underline()
-    //   .write(`[${timestamp}]`)
-    //   .resetUnderline()
-    //   .write(`: ${capitalize(classType)}: `)
-    //   .bold()
-    //   .write(`${responseStatus} `)
-    //   .resetBold()
-    //   .write(" \n")
-    //   .write(`Referer: `)
-    //   .write(`${referer} `)
-    //   .write(" \n")
-    //   .write(`Response Data: `)
-    //   .bold()
-    //   .write(`${responseData}`)
-    //   .resetBold()
-    //   .write(" \n")
-    //   .fg.reset();
-    console.log(data.log);
+    const {
+      timestamp,
+      class: classType,
+      type,
+      log,
+      stack
+    } = data;
+
+    if (classType === "client") {
+      cursor.fg.brightYellow();
+    } else {
+      cursor.fg.brightCyan();
+    }
+    cursor
+      .underline()
+      .write(`[${timestamp}]`)
+      .resetUnderline()
+      .write(" \n")
+      .write(`${capitalize(classType)}: `)
+      .bold()
+      .write(`${type} `)
+      .resetBold()
+      .write(" \n")
+      .write(`Log: `)
+      .bold()
+      .write(`${log} `)
+      .resetBold()
+      .write(" \n")
+      .write(`Stack: `)
+      .bold()
+      .write(`${stack[0]}`)
+      .resetBold()
+      .write(" \n")
+      .fg.reset();
   }
 });
 
