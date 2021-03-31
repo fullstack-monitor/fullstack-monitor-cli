@@ -33,4 +33,22 @@ async function storeLogs(logs) {
   return data;
 }
 
-module.exports = { getAllLogs, storeLogs };
+async function deleteLogs() {
+  const res = await fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'utf8');
+  return [];
+}
+
+async function checkLogFile() {
+  fs.access(path.resolve(__dirname, '../data/allLogs.json'), (err) => {
+    // if there's error write the file
+    if (err) {
+      fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'utf8');
+      return 'log file created';
+    }
+
+    // if there's no error
+    return 'log file exist';
+  });
+}
+
+module.exports = { getAllLogs, storeLogs, deleteLogs, checkLogFile };

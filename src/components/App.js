@@ -33,9 +33,8 @@ class App extends Component {
     this.state.socket.emit('get initial logs')
   }
 
-  sendWSMessageArrow = () => {
-    console.log('inside sendWSMessage Arrow');
-    this.state.socket.emit("chat message", "hi from client arrow");
+  deleteLogs = () => {
+    this.state.socket.emit("delete-logs", true);
   };
 
   render() {
@@ -43,7 +42,7 @@ class App extends Component {
     console.log(`this.state.logs`, this.state.logs);
     return (
       <div>
-        {/* <Button onClick={this.sendWSMessageArrow}>Yo Arrow</Button> */}
+        <Button onClick={this.deleteLogs}>Delete Logs</Button>
         <Table variant="simple">
         <TableCaption>Ultimate Logger</TableCaption>
         <Thead>
