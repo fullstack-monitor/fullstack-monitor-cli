@@ -6,10 +6,9 @@ let data;
 const loggerController = {};
 
 // middleware to get all type of logs
-loggerController.getLogs = (req, res, next) => {
+loggerController.getLogs = async (req, res, next) => {
   // read all logs from saved files
-  // eslint-disable-next-line global-require
-  const logs = require('../data/allLogs.json');
+  const logs = await JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/allLogs.json'), 'utf8'));
 
   if (!logs) {
     return next({
