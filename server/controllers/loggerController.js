@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { getAllLogs } = require('../helpers/helpers');
+const { getAllLogs, storeLogs } = require('../helpers/helpers');
 
 let data;
 
@@ -29,33 +29,7 @@ loggerController.addLogs = (req, res, next) => {
   // assign incoming req.body to logs variable
   const logs = req.body;
 
-  // error handling for if there's no data in req.body
-  if (!logs) {
-    return next({
-      log: 'loggerController.addSeverLogs:  ERROR: Error receiving  data from Application',
-      message: { err: 'Error occurred in loggerController.addLogs. Check server logs for more details.' },
-    });
-  }
-
-  // error handling just in case json file reset
-  try {
-    // eslint-disable-next-line global-require
-    data = require('../data/allLogs.json');
-  } catch (e) {
-    data = [];
-  }
-
-  // check if incoming logs are in array format
-  if (Array.isArray(logs)) {
-    // push individual array element into existing data
-    logs.forEach((log) => data.push(log));
-  } else {
-  // if incoming logs are not in array format, push directly into existing data
-    data.push(logs);
-  }
-
-  // write data that holds existing requests and new request to request.json
-  fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify(data, null, 2), 'utf8');
+  storeLogs(logs);
   return next();
 };
 

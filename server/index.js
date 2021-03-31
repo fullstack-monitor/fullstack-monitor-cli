@@ -2,7 +2,7 @@
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
-const { getAllLogs } = require('./helpers/helpers');
+const { getAllLogs, storeLogs } = require('./helpers/helpers');
 
 const {
   serverPort, app, http, io,
@@ -48,8 +48,11 @@ io.on("connection", (socket) => {
     };
     io.emit('display-logs', data);
   });
-  socket.on("store-logs", (logsObj) => {
-    // storeLogs(logsObj.class, logsObj.logs, io);
+  socket.on("store-logs", async (logs) => {
+    const data = {
+      allLogs: await storeLogs(logs)
+    };
+    io.emit('display-logs', data);
   });
 });
 
