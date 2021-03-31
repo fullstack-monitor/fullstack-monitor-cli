@@ -15,25 +15,13 @@ router.get('/logs',
   loggerController.getLogs,
   (req, res) => res.status(200).json(res.locals.logs));
 
-// route to retrieve specific log type
-router.get('/logs/:type',
-  loggerController.getSpecificLog,
-  (req, res) => res.status(200).json(res.locals.logs));
-
-// route to post console log coming from client and sever type
-router.post('/logs',
+// route to post all types of logs: client, sever, requests
+router.post('/logs/:type',
+  loggerController.checkLogFile,
   loggerController.addLogs,
   loggerController.getLogs,
   webSocketMiddleware,
-  (req, res) => res.status(200).json(`Added ${req.params.type} logs`));
-
-// route to post request/respond data
-// router.post('/requests',
-//   loggerController.checkRequestFile,
-//   loggerController.addRequests,
-//   loggerController.getLogs,
-//   webSocketMiddleware,
-//   (req, res) => res.status(200).json('Requests added!'));
+  (req, res) => res.status(200).json(`Added ${req.params}logs`));
 
 // route to delete logs
 router.delete('/logs/delete',

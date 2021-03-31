@@ -24,7 +24,6 @@ class App extends Component {
       socket: io('http://localhost:3861/', {transports: ['websocket']}),
       logs: []
     }
-    console.log('logFiles',this.state.logs);
   }
   componentDidMount() {
     this.state.socket.on("chat message", (msg) => {
