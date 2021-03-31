@@ -5,7 +5,7 @@ function socketRouter() {
   // Setup socket routes on initial connection with client
   io.on("connection", (socket) => {
     // Send logs to FE on first page load
-    socket.on('get initial logs', loggerController.getAllLogs);
+    socket.on('get-initial-logs', loggerController.getAllLogs);
 
     // Store logs
     socket.on('store-logs', loggerController.storeLogs);

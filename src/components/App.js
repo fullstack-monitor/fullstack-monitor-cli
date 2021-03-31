@@ -30,7 +30,7 @@ class App extends Component {
       console.log("recieved message from server: ", msg);
       this.setState({logs: msg.allLogs});
     });
-    this.state.socket.emit('get initial logs')
+    this.state.socket.emit('get-initial-logs')
   }
 
   deleteLogs = () => {
