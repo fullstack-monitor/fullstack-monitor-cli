@@ -15,6 +15,8 @@ loggerController.storeLogs = async (logs) => {
   const data = { allLogs: await storeLogs(logs) };
   // Send the new logs to the FE
   io.emit('display-logs', data);
+  // Send the new logs to the cmd app
+  io.emit('print-logs', logs);
   // Let users project know logs have been successfully stored
   io.emit('store-logs', 'success');
 };
