@@ -1,0 +1,3 @@
+{
+  "ignore": ["server/data/*.json", "Server/data/*.json", "Server/data/*", "server/data/*", "./server/data/*.json", "./Server/data/*.json", "./Server/data/*", "./server/data/*"]
+}
