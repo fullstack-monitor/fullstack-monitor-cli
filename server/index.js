@@ -2,15 +2,16 @@
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
-const { getAllLogs, storeLogs } = require('./helpers/helpers');
+const { handleSockets } = require('./sockets/sockets');
 
 const {
-  serverPort, app, http, io,
+  serverPort, app, http,
 } = require("../config");
 
-const apiRouter = require("./routes/api");
-
 const port = process.env.port || serverPort;
+
+// Handle sockets
+handleSockets();
 
 app.use(express.json());
 
@@ -20,8 +21,6 @@ const HTML_FILE = path.join(DIST_DIR, "index.html"); // NEW
 // // statically serve everything in the dist folder on the route '/dist'
 app.use(express.static(DIST_DIR)); // NEW
 app.use(cors());
-
-app.use("/api", apiRouter);
 
 // serve index.html on the route '/'
 app.get("/", (req, res) => res.status(200).sendFile(HTML_FILE));
@@ -36,23 +35,6 @@ app.use((err, req, res, next) => {
   };
   const errorObj = { ...defaultErr, ...err };
   return res.status(errorObj.status).json(errorObj.message);
-});
-
-io.on("connection", (socket) => {
-  console.log("connected");
-  socket.on('get initial logs', async () => {
-    const data = {
-      allLogs: await getAllLogs()
-    };
-    io.emit('display-logs', data);
-  });
-  socket.on("store-logs", async (logs) => {
-    const data = {
-      allLogs: await storeLogs(logs)
-    };
-    io.emit('display-logs', data);
-    io.emit('store-logs', 'success');
-  });
 });
 
 // listens on port 3000 -> http://localhost:3000/
