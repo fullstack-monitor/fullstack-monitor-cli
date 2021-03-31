@@ -10,6 +10,9 @@
     "build": "npx webpack --config webpack.config.js",
     "test": "jest"
   },
+  "nodemonConfig" : {
+    "ignore" : ["server/data/*"]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
