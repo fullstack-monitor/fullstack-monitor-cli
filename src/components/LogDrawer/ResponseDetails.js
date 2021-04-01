@@ -1,13 +1,17 @@
-import React from 'react';
+import React from "react";
 import {
-  Stack,
-  DrawerBody,
-  Box,
-  FormLabel,
-  Text,
+  Stack, DrawerBody, Box, FormLabel, Text
 } from "@chakra-ui/react";
+import { sanitizeRequestResponseData } from "../../helpers/helpers";
 
 export default function ResponseDetails({ activeLog }) {
+  const {
+    timestamp,
+    class: classType,
+    responseStatus,
+    referer,
+    responseData,
+  } = activeLog;
   return (
     <DrawerBody>
       <Stack spacing="10px">
@@ -29,7 +33,7 @@ export default function ResponseDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>Data:</FormLabel>
-          <Text>{activeLog.responseData ? activeLog.responseData : 'No data.'}</Text>
+          <Text>{sanitizeRequestResponseData(responseData)}</Text>
         </Box>
       </Stack>
     </DrawerBody>

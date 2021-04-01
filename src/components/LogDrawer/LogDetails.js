@@ -9,31 +9,35 @@ import {
   List,
   ListItem
 } from "@chakra-ui/react";
+import { sanitizeLogData } from "../../helpers/helpers";
 
 export default function LogDetails({ activeLog }) {
+  const {
+    timestamp, class: classType, type, log, stack
+  } = activeLog;
   return (
     <DrawerBody>
       <Stack spacing="10px">
         <Box display="flex">
           <FormLabel>Timestamp:</FormLabel>
-          <Text>{activeLog.timestamp}</Text>
+          <Text>{timestamp}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Type:</FormLabel>
-          <Text>{activeLog.class}</Text>
+          <Text>{classType}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Class:</FormLabel>
-          <Text>{activeLog.type}</Text>
+          <Text>{type}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Log:</FormLabel>
-          <Text>{activeLog.log}</Text>
+          <Text>{sanitizeLogData(log)}</Text>
         </Box>
         <Box>
           <FormLabel>Stack:</FormLabel>
           <List spacing={3}>
-            {activeLog.stack.map((line, i) => <ListItem key={`${line}${i}`}>{line}</ListItem>)}
+            {stack.map((line, i) => <ListItem key={`${line}${i}`}>{line}</ListItem>)}
           </List>
         </Box>
       </Stack>

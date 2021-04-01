@@ -6,13 +6,12 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
+import { sanitizeRequestResponseData } from "../../helpers/helpers";
 
 export default function RequestDetails({ activeLog }) {
   const {
-    timestamp, class: classType, method, originalUri, fromIP
+    timestamp, class: classType, method, originalUri, fromIP, requestData
   } = activeLog;
-  let requestData = JSON.stringify(activeLog.requestData);
-  requestData = requestData === "{}" ? 'No data.' : requestData;
   return (
     <DrawerBody>
       <Stack spacing="10px">
@@ -34,7 +33,7 @@ export default function RequestDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>RequestData:</FormLabel>
-          <Text>{requestData}</Text>
+          <Text>{sanitizeRequestResponseData(requestData)}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>From IP:</FormLabel>
