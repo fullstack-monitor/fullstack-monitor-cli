@@ -2,7 +2,7 @@ import React from "react";
 import {
   Stack, DrawerBody, Box, FormLabel, Text
 } from "@chakra-ui/react";
-import { sanitizeRequestResponseData } from "../../helpers/helpers";
+import { sanitizeRequestResponseData, capitalizeFirstLetter } from "../../helpers/helpers";
 
 export default function ResponseDetails({ activeLog }) {
   const {
@@ -17,19 +17,19 @@ export default function ResponseDetails({ activeLog }) {
       <Stack spacing="10px">
         <Box display="flex">
           <FormLabel>Timestamp:</FormLabel>
-          <Text>{activeLog.timestamp}</Text>
+          <Text>{timestamp}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Type:</FormLabel>
-          <Text>{activeLog.class}</Text>
+          <Text>{capitalizeFirstLetter(classType)}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Status:</FormLabel>
-          <Text>{activeLog.responseStatus}</Text>
+          <Text>{responseStatus}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Referer:</FormLabel>
-          <Text>{activeLog.referer}</Text>
+          <Text>{referer}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Data:</FormLabel>

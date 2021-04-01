@@ -26,3 +26,5 @@ export const sanitizeLogData = (data) => {
   dataString = dataString === "" ? NO_DATA_RESPONSE : dataString;
   return dataString;
 };
+
+export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);

@@ -6,7 +6,7 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
-import { sanitizeRequestResponseData } from "../../helpers/helpers";
+import { sanitizeRequestResponseData, capitalizeFirstLetter } from "../../helpers/helpers";
 
 export default function RequestDetails({ activeLog }) {
   const {
@@ -21,7 +21,7 @@ export default function RequestDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>Type:</FormLabel>
-          <Text>{classType}</Text>
+          <Text>{capitalizeFirstLetter(classType)}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Method:</FormLabel>

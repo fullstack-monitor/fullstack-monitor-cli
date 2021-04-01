@@ -9,7 +9,7 @@ import {
   List,
   ListItem
 } from "@chakra-ui/react";
-import { sanitizeLogData } from "../../helpers/helpers";
+import { sanitizeLogData, capitalizeFirstLetter } from "../../helpers/helpers";
 
 export default function LogDetails({ activeLog }) {
   const {
@@ -24,11 +24,11 @@ export default function LogDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>Type:</FormLabel>
-          <Text>{classType}</Text>
+          <Text>{capitalizeFirstLetter(classType)}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Class:</FormLabel>
-          <Text>{type}</Text>
+          <Text>{capitalizeFirstLetter(type)}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Log:</FormLabel>

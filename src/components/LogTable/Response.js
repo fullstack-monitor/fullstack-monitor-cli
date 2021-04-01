@@ -1,6 +1,6 @@
 import React from "react";
 import { Tr, Td } from "@chakra-ui/react";
-import { sanitizeAndShortenRequestResponseData } from "../../helpers/helpers";
+import { sanitizeAndShortenRequestResponseData, capitalizeFirstLetter } from "../../helpers/helpers";
 
 export default function Request({ response, splitView, showMoreLogInfo }) {
   const {
@@ -9,7 +9,7 @@ export default function Request({ response, splitView, showMoreLogInfo }) {
   return (
     <Tr onClick={splitView}>
       <Td>{timestamp}</Td>
-      <Td>{`${responseStatus} ${classType}`}</Td>
+      <Td>{`${responseStatus} ${capitalizeFirstLetter(classType)}`}</Td>
       <Td>{referer}</Td>
       <Td>{sanitizeAndShortenRequestResponseData(responseData)}</Td>
     </Tr>

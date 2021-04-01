@@ -1,6 +1,6 @@
 import React from "react";
 import { Tr, Td } from "@chakra-ui/react";
-import { sanitizeAndShortenLogData } from "../../helpers/helpers";
+import { sanitizeAndShortenLogData, capitalizeFirstLetter } from "../../helpers/helpers";
 
 export default function Log({ log, splitView, showMoreLogInfo }) {
   const {
@@ -9,8 +9,8 @@ export default function Log({ log, splitView, showMoreLogInfo }) {
   return (
     <Tr onClick={splitView}>
       <Td>{timestamp}</Td>
-      <Td>{classType}</Td>
-      <Td>{type}</Td>
+      <Td>{capitalizeFirstLetter(classType)}</Td>
+      <Td>{capitalizeFirstLetter(type)}</Td>
       <Td>{sanitizeAndShortenLogData(logData)}</Td>
     </Tr>
   );
