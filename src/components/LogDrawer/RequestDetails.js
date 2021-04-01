@@ -8,6 +8,9 @@ import {
 } from "@chakra-ui/react";
 
 export default function RequestDetails({ activeLog }) {
+  const {
+    timestamp, class: classType, method, originalUri, fromIP
+  } = activeLog;
   let requestData = JSON.stringify(activeLog.requestData);
   requestData = requestData === "{}" ? 'no data' : requestData;
   return (
@@ -15,19 +18,19 @@ export default function RequestDetails({ activeLog }) {
       <Stack spacing="10px">
         <Box display="flex">
           <FormLabel>Timestamp:</FormLabel>
-          <Text>{activeLog.timestamp}</Text>
+          <Text>{timestamp}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Type:</FormLabel>
-          <Text>{activeLog.class}</Text>
+          <Text>{classType}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Method:</FormLabel>
-          <Text>{activeLog.method}</Text>
+          <Text>{method}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>Endpoint:</FormLabel>
-          <Text>{activeLog.originalUri}</Text>
+          <Text>{originalUri}</Text>
         </Box>
         <Box display="flex">
           <FormLabel>RequestData:</FormLabel>
@@ -35,7 +38,7 @@ export default function RequestDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>From IP:</FormLabel>
-          <Text>{activeLog.fromIP}</Text>
+          <Text>{fromIP}</Text>
         </Box>
       </Stack>
     </DrawerBody>
