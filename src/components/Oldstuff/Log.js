@@ -9,8 +9,13 @@ export default function Log({ log, splitView, showMoreLogInfo }) {
     <Tr onClick={splitView}>
       <Td>{log.timestamp}</Td>
       <Td>{log.class}</Td>
-      <Td>{log.type}</Td>
-      <Td>{log.log}</Td>
+      { !showMoreLogInfo
+        && (
+        <>
+          <Td>{log.type}</Td>
+          <Td>{log.log}</Td>
+        </>
+        )}
     </Tr>
   );
 }

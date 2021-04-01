@@ -30,8 +30,12 @@ export default function LogTable({ showMoreLogInfo, splitView, logs }) {
             <Tr>
               <Th>TimeStamp</Th>
               <Th>Type</Th>
-              <Th>Class</Th>
-              <Th>Log</Th>
+              {!showMoreLogInfo && (
+                <>
+                  <Th>Class</Th>
+                  <Th>Log</Th>
+                </>
+              )}
             </Tr>
           </Thead>
           <Tbody>
@@ -82,12 +86,27 @@ export default function LogTable({ showMoreLogInfo, splitView, logs }) {
             <Tr>
               <Th>Type</Th>
               <Th>TimeStamp</Th>
-              <Th>Class</Th>
-              <Th>Log</Th>
+              {!showMoreLogInfo && (
+                <>
+                  <Th>Class</Th>
+                  <Th>Log</Th>
+                </>
+              )}
             </Tr>
           </Tfoot>
         </Table>
       </div>
+      {showMoreLogInfo && (
+        <div className="logDetailsContainer">
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>Details</Th>
+              </Tr>
+            </Thead>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }

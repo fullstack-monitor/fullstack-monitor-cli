@@ -9,8 +9,13 @@ export default function Request({ request, splitView, showMoreLogInfo }) {
     <Tr onClick={splitView}>
       <Td>{request.timestamp}</Td>
       <Td>{request.class}</Td>
-      <Td>{request.method}</Td>
-      <Td>{request.originalUri}</Td>
+      { !showMoreLogInfo
+        && (
+        <>
+          <Td>{request.method}</Td>
+          <Td>{request.originalUri}</Td>
+        </>
+        )}
     </Tr>
   );
 }

@@ -4,24 +4,30 @@ import "../index.css";
 import { io } from "socket.io-client";
 import {
   Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
   TableCaption,
   Button,
   Tab,
   TabList,
-  TabPanels,
-  TabPanel,
   Tabs,
   Checkbox,
   Stack,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Box,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Select,
+  Textarea,
+  Text,
 } from "@chakra-ui/react";
-import Log from "./Log";
-import Request from "./Request";
-import Response from "./Response";
 import LogTable from "./LogTable";
 import { serverPort } from "../../configConstants";
 
@@ -34,7 +40,9 @@ class App extends Component {
       }),
       logs: [],
       showMoreLogInfo: false, // switch every time you clickit
+      // showMoreLogInfo: true, // switch every time you clickit
       logId: null,
+      // activeLog: {},
       activeLog: {},
       logTypes: {
         client: true,
@@ -60,12 +68,12 @@ class App extends Component {
       prevState.logs = logs;
       return prevState;
     });
+    // REMOVE
+    // this.setState({ activeLog: logs[0] })
   };
 
   splitView = (index) => {
-    console.log("split view: ", index);
     const { logs, showMoreLogInfo } = this.state;
-    console.log(`logs[i]`, logs[index]);
     this.setState({
       activeLog: logs[index],
       showMoreLogInfo: !showMoreLogInfo,
@@ -99,8 +107,6 @@ class App extends Component {
   };
 
   filterLogs = (type) => {
-    console.log('inside filter logs');
-    console.log(`type`, type)
     const { checkBoxes } = this.state;
     switch (type) {
       case 'all':
@@ -145,7 +151,7 @@ class App extends Component {
   }
 
   render() {
-    const { logs, showMoreLogInfo, showCustom, logTypes, checkBoxes } = this.state;
+    const { logs, showMoreLogInfo, showCustom, logTypes, checkBoxes, activeLog } = this.state;
     return (
       <div>
         <Tabs>
@@ -158,7 +164,7 @@ class App extends Component {
               <Tab onClick={() => this.filterLogs("response")}>Responses</Tab>
               <Tab onClick={() => this.filterLogs("custom")}>Custom</Tab>
             </div>
-            <Button onClick={this.deleteLogs} margin="5px">
+            <Button onClick={this.deleteLogs} colorScheme="red" margin="5px">
               Delete Logs
             </Button>
           </TabList>
@@ -176,94 +182,49 @@ class App extends Component {
           showMoreLogInfo={showMoreLogInfo}
           splitView={this.splitView}
         />
-        {/* <div className="tableContainer">
-          <div className="mainTableContainer">
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>TimeStamp</Th>
-                  <Th>Type</Th>
-                  {!showMoreLogInfo && (
-                    <>
-                      <Th>Class</Th>
-                      <Th>Log</Th>
-                    </>
-                  )}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {logs.map((log, i) => {
-                  switch (log.class) {
-                    case "client":
-                      return (
-                        <Log
-                          log={log}
-                          key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                          splitView={() => this.splitView(i)}
-                          showMoreLogInfo={showMoreLogInfo}
-                        />
-                      );
-                    case "server":
-                      return (
-                        <Log
-                          log={log}
-                          key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                          splitView={() => this.splitView(i)}
-                          showMoreLogInfo={showMoreLogInfo}
-                        />
-                      );
-                    case "request":
-                      return (
-                        <Request
-                          request={log}
-                          key={`${log.class}${log.method}${log.timestamp}${log.originalUri}`}
-                          splitView={() => this.splitView(i)}
-                          showMoreLogInfo={showMoreLogInfo}
-                        />
-                      );
-                    case "response":
-                      return (
-                        <Response
-                          response={log}
-                          key={`${log.class}${log.responseStatus}${log.timestamp}`}
-                          splitView={() => this.splitView(i)}
-                          showMoreLogInfo={showMoreLogInfo}
-                        />
-                      );
-                    default:
-                      return <noscript />;
-                  }
-                })}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Type</Th>
-                  <Th>TimeStamp</Th>
-                  {!showMoreLogInfo && (
-                    <>
-                      <Th>Class</Th>
-                      <Th>Log</Th>
-                    </>
-                  )}
-                </Tr>
-              </Tfoot>
-            </Table>
-          </div>
-          {showMoreLogInfo && (
-            <div className="logDetailsContainer">
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>Details</Th>
-                  </Tr>
-                </Thead>
-              </Table>
-            </div>
-          )}
-        </div> */}
         <Table>
           <TableCaption>Ultimate Logger</TableCaption>
         </Table>
+        <Drawer
+          isOpen={showMoreLogInfo}
+          placement="right"
+          size="xl"
+          onClose={() => this.setState({ showMoreLogInfo: false })}
+        >
+          <DrawerOverlay>
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader borderBottomWidth="1px">
+                Log Details
+              </DrawerHeader>
+
+              <DrawerBody>
+                <Stack spacing="24px">
+                  <Box display="flex">
+                    <FormLabel>Timestamp:</FormLabel>
+                    <Text>{activeLog.timestamp}</Text>
+                  </Box>
+                  <Box display="flex">
+                    <FormLabel>Type:</FormLabel>
+                    <Text>{activeLog.class}</Text>
+                  </Box>
+                  <Box display="flex">
+                    <FormLabel>Class:</FormLabel>
+                    <Text>{activeLog.type}</Text>
+                  </Box>
+                  <Box display="flex">
+                    <FormLabel>Log:</FormLabel>
+                    <Text>{activeLog.log}</Text>
+                  </Box>
+                </Stack>
+              </DrawerBody>
+
+              <DrawerFooter borderTopWidth="1px">
+                <Text>Full Stack Monitor</Text>
+              </DrawerFooter>
+            </DrawerContent>
+          </DrawerOverlay>
+        </Drawer>
       </div>
     );
   }

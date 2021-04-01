@@ -9,8 +9,13 @@ export default function Request({ response, splitView, showMoreLogInfo }) {
     <Tr onClick={splitView}>
       <Td>{response.timestamp}</Td>
       <Td>{response.class}</Td>
-      <Td>{response.responseStatus}</Td>
-      <Td>{response.responseData ? response.responseData : 'no data'}</Td>
+      { !showMoreLogInfo
+        && (
+        <>
+          <Td>{response.responseStatus}</Td>
+          <Td>{response.responseData ? response.responseData : 'no data'}</Td>
+        </>
+        )}
     </Tr>
   );
 }
