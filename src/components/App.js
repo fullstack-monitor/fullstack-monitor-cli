@@ -22,6 +22,7 @@ import {
 import Log from "./Log";
 import Request from "./Request";
 import Response from "./Response";
+import LogTable from "./LogTable";
 import { serverPort } from "../../configConstants";
 
 class App extends Component {
@@ -35,6 +36,19 @@ class App extends Component {
       showMoreLogInfo: false, // switch every time you clickit
       logId: null,
       activeLog: {},
+      logTypes: {
+        client: true,
+        server: true,
+        request: true,
+        response: true,
+      },
+      checkBoxes: {
+        client: true,
+        server: true,
+        request: true,
+        response: true,
+      },
+      showCustom: false
     };
   }
 
@@ -84,44 +98,85 @@ class App extends Component {
     });
   };
 
+  filterLogs = (type) => {
+    console.log('inside filter logs');
+    console.log(`type`, type)
+    const { checkBoxes } = this.state;
+    switch (type) {
+      case 'all':
+        this.setState({
+          logTypes: {
+            client: true,
+            server: true,
+            request: true,
+            response: true,
+          },
+          showCustom: false
+        });
+        break;
+      case 'client':
+      case 'server':
+      case 'request':
+      case 'response':
+        this.setState({
+          logTypes: {
+            [type]: true,
+          },
+          showCustom: false
+        });
+        break;
+      case 'custom':
+        this.setState({
+          logTypes: checkBoxes,
+          showCustom: true,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  setCheckBoxes = (e) => {
+    const { value: type, checked } = e.target;
+    const { checkBoxes } = this.state;
+    const newCheckBoxes = {...checkBoxes}
+    newCheckBoxes[type] = checked;
+    this.setState({ checkBoxes: newCheckBoxes, logTypes: newCheckBoxes });
+  }
+
   render() {
-    const { logs, showMoreLogInfo, activeLog } = this.state;
-    console.log(`this.state.logs`, logs);
+    const { logs, showMoreLogInfo, showCustom, logTypes, checkBoxes } = this.state;
     return (
       <div>
         <Tabs>
           <TabList>
             <div className="tabsInnerContainer">
-              <Tab>All Logs</Tab>
-              <Tab>Client Logs</Tab>
-              <Tab>Server Logs</Tab>
-              <Tab>Requests</Tab>
-              <Tab>Responses</Tab>
-              <Tab>Custom</Tab>
+              <Tab onClick={() => this.filterLogs("all")}>All Logs</Tab>
+              <Tab onClick={() => this.filterLogs("client")}>Client Logs</Tab>
+              <Tab onClick={() => this.filterLogs("server")}>Server Logs</Tab>
+              <Tab onClick={() => this.filterLogs("request")}>Requests</Tab>
+              <Tab onClick={() => this.filterLogs("response")}>Responses</Tab>
+              <Tab onClick={() => this.filterLogs("custom")}>Custom</Tab>
             </div>
-            {/* <div> */}
-            <Button onClick={this.deleteLogs} margin="5px">Delete Logs</Button>
-            {/* </div> */}
+            <Button onClick={this.deleteLogs} margin="5px">
+              Delete Logs
+            </Button>
           </TabList>
-
-          <TabPanels>
-            <TabPanel>{/* All logs */}</TabPanel>
-            <TabPanel>{/* Client logs */}</TabPanel>
-            <TabPanel>{/* Server logs */}</TabPanel>
-            <TabPanel>{/* Requests logs */}</TabPanel>
-            <TabPanel>{/* Responses logs */}</TabPanel>
-            <TabPanel>
-              {/* Custom logs */}
-              <Stack spacing={10} direction="row">
-                <Checkbox defaultIsChecked>Client Logs</Checkbox>
-                <Checkbox defaultIsChecked>Server Logs</Checkbox>
-                <Checkbox defaultIsChecked>Requests</Checkbox>
-                <Checkbox defaultIsChecked>Responses</Checkbox>
-              </Stack>
-            </TabPanel>
-          </TabPanels>
         </Tabs>
-        <div className="tableContainer">
+        { showCustom &&
+          <Stack margin="5px" spacing={10} direction="row">
+            <Checkbox onChange={this.setCheckBoxes} value="client" isChecked={checkBoxes.client}>Client Logs</Checkbox>
+            <Checkbox onChange={this.setCheckBoxes} value="server" isChecked={checkBoxes.server}>Server Logs</Checkbox>
+            <Checkbox onChange={this.setCheckBoxes} value="request" isChecked={checkBoxes.request}>Requests</Checkbox>
+            <Checkbox onChange={this.setCheckBoxes} value="response" isChecked={checkBoxes.response}>Responses</Checkbox>
+          </Stack>
+        }
+        <LogTable
+          logs={logs.filter((log) => logTypes[log.class])}
+          showMoreLogInfo={showMoreLogInfo}
+          splitView={this.splitView}
+        />
+        {/* <div className="tableContainer">
           <div className="mainTableContainer">
             <Table variant="simple">
               <Thead>
@@ -205,7 +260,7 @@ class App extends Component {
               </Table>
             </div>
           )}
-        </div>
+        </div> */}
         <Table>
           <TableCaption>Ultimate Logger</TableCaption>
         </Table>
