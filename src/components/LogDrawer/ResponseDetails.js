@@ -24,12 +24,12 @@ export default function ResponseDetails({ activeLog }) {
           <Text>{activeLog.responseStatus}</Text>
         </Box>
         <Box display="flex">
-          <FormLabel>Endpoint:</FormLabel>
-          <Text>{activeLog.responseData ? activeLog.responseData : 'no data'}</Text>
-        </Box>
-        <Box display="flex">
           <FormLabel>Referer:</FormLabel>
           <Text>{activeLog.referer}</Text>
+        </Box>
+        <Box display="flex">
+          <FormLabel>Data:</FormLabel>
+          <Text>{activeLog.responseData ? activeLog.responseData : 'no data'}</Text>
         </Box>
       </Stack>
     </DrawerBody>
