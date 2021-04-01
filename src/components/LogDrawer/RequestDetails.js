@@ -12,7 +12,7 @@ export default function RequestDetails({ activeLog }) {
     timestamp, class: classType, method, originalUri, fromIP
   } = activeLog;
   let requestData = JSON.stringify(activeLog.requestData);
-  requestData = requestData === "{}" ? 'no data' : requestData;
+  requestData = requestData === "{}" ? 'No data.' : requestData;
   return (
     <DrawerBody>
       <Stack spacing="10px">

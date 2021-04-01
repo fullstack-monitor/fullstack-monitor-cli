@@ -6,7 +6,7 @@ export default function Request({ request, splitView, showMoreLogInfo }) {
     timestamp, class: classType, method, originalUri
   } = request;
   let requestData = JSON.stringify(request.requestData);
-  requestData = requestData === "{}" ? 'no data' : requestData;
+  requestData = requestData === "{}" ? 'No data.' : requestData;
   if (requestData.length > 50) requestData = `${requestData.slice(0, 50)}...`;
   return (
     <Tr onClick={splitView}>

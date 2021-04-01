@@ -29,7 +29,7 @@ export default function ResponseDetails({ activeLog }) {
         </Box>
         <Box display="flex">
           <FormLabel>Data:</FormLabel>
-          <Text>{activeLog.responseData ? activeLog.responseData : 'no data'}</Text>
+          <Text>{activeLog.responseData ? activeLog.responseData : 'No data.'}</Text>
         </Box>
       </Stack>
     </DrawerBody>
