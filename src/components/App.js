@@ -67,9 +67,9 @@ class App extends Component {
       });
       prevState.logs = logs;
       return prevState;
-    });
+    }, () => window.scrollTo(0, document.body.scrollHeight));
     // REMOVE
-    // this.setState({ activeLog: logs[2] });
+    // this.setState({ activeLog: logs[1] });
   };
 
   deleteLogs = () => {
