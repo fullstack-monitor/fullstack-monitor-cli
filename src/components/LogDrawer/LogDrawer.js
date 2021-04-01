@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Drawer,
   DrawerFooter,
@@ -6,18 +6,19 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Text,
+  Button
 } from "@chakra-ui/react";
 import LogDetails from "./LogDetails";
 import RequestDetails from "./RequestDetails";
 import ResponseDetails from "./ResponseDetails";
 
 export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
+  const [size, setSize] = useState('xl');
   return (
     <Drawer
       isOpen={showMoreLogInfo}
       placement="right"
-      size="xl"
+      size={size}
       onClose={onClose}
     >
       <DrawerOverlay>
@@ -36,7 +37,10 @@ export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
           )}
 
           <DrawerFooter borderTopWidth="1px">
-            <Text>Full Stack Monitor</Text>
+            { size === 'xl'
+              && <Button colorScheme="messenger" onClick={() => setSize('full')}>Fullscreen</Button>}
+            { size === 'full'
+              && <Button colorScheme="messenger" onClick={() => setSize('xl')}>Shrink</Button>}
           </DrawerFooter>
         </DrawerContent>
       </DrawerOverlay>
