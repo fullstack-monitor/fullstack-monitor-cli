@@ -4,15 +4,11 @@ import { io } from "socket.io-client";
 import {
   Table,
   TableCaption,
-  Button,
-  Tab,
-  TabList,
-  Tabs,
 } from "@chakra-ui/react";
 import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
 import LogDrawer from "./LogDrawer/LogDrawer";
-import CustomCheckboxes from "./CustomCheckboxes";
+import IntelligentHeader from "./IntelligentHeader/IntelligentHeader";
 
 class App extends Component {
   constructor() {
@@ -142,27 +138,13 @@ class App extends Component {
     } = this.state;
     return (
       <div>
-        <Tabs>
-          <TabList>
-            <div className="tabsInnerContainer">
-              <Tab onClick={() => this.filterLogs("all")}>All Logs</Tab>
-              <Tab onClick={() => this.filterLogs("client")}>Client Logs</Tab>
-              <Tab onClick={() => this.filterLogs("server")}>Server Logs</Tab>
-              <Tab onClick={() => this.filterLogs("request")}>Requests</Tab>
-              <Tab onClick={() => this.filterLogs("response")}>Responses</Tab>
-              <Tab onClick={() => this.filterLogs("custom")}>Custom</Tab>
-            </div>
-            <Button onClick={this.deleteLogs} colorScheme="red" margin="5px">
-              Delete Logs
-            </Button>
-          </TabList>
-        </Tabs>
-        {showCustom && (
-          <CustomCheckboxes
-            checkBoxes={checkBoxes}
-            setCheckBoxes={this.setCheckBoxes}
-          />
-        )}
+        <IntelligentHeader
+          filterLogs={this.filterLogs}
+          deleteLogs={this.deleteLogs}
+          setCheckBoxes={this.setCheckBoxes}
+          checkBoxes={checkBoxes}
+          showCustom={showCustom}
+        />
         <LogTable
           logs={logs.filter((log) => logTypes[log.class])}
           showMoreLogInfo={showMoreLogInfo}
