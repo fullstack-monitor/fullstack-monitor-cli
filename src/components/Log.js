@@ -1,37 +1,16 @@
 import React from "react";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
   Tr,
-  Th,
   Td,
-  TableCaption,
-  Button,
 } from "@chakra-ui/react";
 
-export default function Log({ log, showMoreLogInfo }) {
+export default function Log({ log, splitView }) {
   return (
-    <Tr>
-      <Td onClick={showMoreLogInfo}>
-        {" "}
-        Log Class:
-        <br />
-        {' '}
-        <br />
-        {log.class}
-      </Td>
-      <Td>
-        {" "}
-        Log Date:
-        {' '}
-        <br />
-        <br />
-        {log.timestamp}
-      </Td>
-      {/* <Td>{log.log}</Td>
-      <Td>{log.id}</Td> */}
+    <Tr onClick={splitView}>
+      <Td>{log.class}</Td>
+      <Td>{log.timestamp}</Td>
+      <Td>{log.type}</Td>
+      <Td>{log.log}</Td>
     </Tr>
   );
 }

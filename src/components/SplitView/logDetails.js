@@ -2,12 +2,8 @@ import React from "react";
 import {
   Table,
   Thead,
-  Tbody,
-  Tfoot,
   Tr,
   Th,
-  Td,
-  TableCaption,
   Button,
 } from "@chakra-ui/react";
 
