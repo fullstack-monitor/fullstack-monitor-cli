@@ -4,13 +4,18 @@ import {
   Td,
 } from "@chakra-ui/react";
 
-export default function Log({ log, splitView }) {
+export default function Log({ log, splitView, showMoreLogInfo }) {
   return (
     <Tr onClick={splitView}>
-      <Td>{log.class}</Td>
       <Td>{log.timestamp}</Td>
-      <Td>{log.type}</Td>
-      <Td>{log.log}</Td>
+      <Td>{log.class}</Td>
+      { !showMoreLogInfo
+        && (
+        <>
+          <Td>{log.type}</Td>
+          <Td>{log.log}</Td>
+        </>
+        )}
     </Tr>
   );
 }

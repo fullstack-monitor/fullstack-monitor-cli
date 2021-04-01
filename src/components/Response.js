@@ -4,13 +4,18 @@ import {
   Td,
 } from "@chakra-ui/react";
 
-export default function Request({ response, splitView }) {
+export default function Request({ response, splitView, showMoreLogInfo }) {
   return (
     <Tr onClick={splitView}>
-      <Td>{response.class}</Td>
       <Td>{response.timestamp}</Td>
-      <Td>{response.responseStatus}</Td>
-      <Td>{response.responseData ? response.responseData : 'no data'}</Td>
+      <Td>{response.class}</Td>
+      { !showMoreLogInfo
+        && (
+        <>
+          <Td>{response.responseStatus}</Td>
+          <Td>{response.responseData ? response.responseData : 'no data'}</Td>
+        </>
+        )}
     </Tr>
   );
 }
