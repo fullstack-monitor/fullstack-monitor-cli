@@ -10,7 +10,7 @@ import {
 export default function ResponseDetails({ activeLog }) {
   return (
     <DrawerBody>
-      <Stack spacing="24px">
+      <Stack spacing="10px">
         <Box display="flex">
           <FormLabel>Timestamp:</FormLabel>
           <Text>{activeLog.timestamp}</Text>
@@ -26,6 +26,10 @@ export default function ResponseDetails({ activeLog }) {
         <Box display="flex">
           <FormLabel>Endpoint:</FormLabel>
           <Text>{activeLog.responseData ? activeLog.responseData : 'no data'}</Text>
+        </Box>
+        <Box display="flex">
+          <FormLabel>Referer:</FormLabel>
+          <Text>{activeLog.referer}</Text>
         </Box>
       </Stack>
     </DrawerBody>
