@@ -5,3 +5,20 @@
 ::placeholder {
   color: gray;
 } */
+
+.tableContainer {
+  display: flex;
+}
+
+.mainTableContainer {
+  width: 100%;
+}
+
+.logDetailsContainer {
+  width: 100%;
+}
+
+.tabsInnerContainer {
+  display: flex;
+  width: 100%;
+}
