@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from "react";
 import "../index.css";
 import { io } from "socket.io-client";
@@ -15,6 +14,7 @@ import {
 import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
 import LogDrawer from "./LogDrawer/LogDrawer";
+
 class App extends Component {
   constructor() {
     super();
@@ -23,10 +23,7 @@ class App extends Component {
         transports: ["websocket"],
       }),
       logs: [],
-      // showMoreLogInfo: false, // switch every time you clickit
-      showMoreLogInfo: true, // switch every time you clickit
-      logId: null,
-      // activeLog: {},
+      showMoreLogInfo: false, // switch every time you clickit
       activeLog: {},
       logTypes: {
         client: true,
@@ -44,27 +41,6 @@ class App extends Component {
     };
   }
 
-  updateLogState = (logs) => {
-    this.setState((prevState) => {
-      logs.map((log, index) => {
-        log.id = "logs" + index;
-      });
-      prevState.logs = logs;
-      return prevState;
-    });
-    // REMOVE
-    this.setState({ activeLog: logs[0] })
-  };
-
-  splitView = (index) => {
-    const { logs, showMoreLogInfo } = this.state;
-    this.setState({
-      activeLog: logs[index],
-      showMoreLogInfo: !showMoreLogInfo,
-      logId: index,
-    });
-  };
-
   componentDidMount() {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
@@ -78,6 +54,24 @@ class App extends Component {
     socket.off("display-logs");
     socket.off("get-initial-logs");
   }
+
+  splitView = (index) => {
+    const { logs, showMoreLogInfo } = this.state;
+    this.setState({
+      activeLog: logs[index],
+      showMoreLogInfo: !showMoreLogInfo,
+    });
+  };
+
+  updateLogState = (logs) => {
+    this.setState((prevState) => {
+      logs.forEach((log, index) => {
+        log.id = `logs${index}`;
+      });
+      prevState.logs = logs;
+      return prevState;
+    });
+  };
 
   deleteLogs = () => {
     const { socket } = this.state;
