@@ -2,27 +2,25 @@
 const express = require("express");
 const path = require("path");
 const cors = require('cors');
+const socketRouter = require('./routes/api');
 
 const {
-  serverPort, app, http, io,
+  serverPort, app, http,
 } = require("../config");
 
-const apiRouter = require("./routes/api");
-
 const port = process.env.port || serverPort;
+
+// Setup sockets router
+socketRouter();
 
 app.use(express.json());
 
 const DIST_DIR = path.join(__dirname, "../dist"); // NEW
 const HTML_FILE = path.join(DIST_DIR, "index.html"); // NEW
 
-// // statically serve everything in the build folder on the route '/build'
-// // app.use('/build', express.static(path.join(__dirname, '../build')));
-// app.use('/build', express.static(path.join(__dirname, DIST_DIR)));
+// // statically serve everything in the dist folder on the route '/dist'
 app.use(express.static(DIST_DIR)); // NEW
 app.use(cors());
-
-app.use("/api", apiRouter);
 
 // serve index.html on the route '/'
 app.get("/", (req, res) => res.status(200).sendFile(HTML_FILE));
@@ -39,16 +37,7 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-io.on("connection", (socket) => {
-  console.log("connected");
-  socket.on("chat message", (msg) => {
-    console.log("received from client: ", msg);
-    // io.emit('chat message', msg);
-    // io.emit("chat message", "hi from server");
-  });
-});
-
-// listens on port 3000 -> http://localhost:3000/
+// listens on port -> http://localhost:${port}/
 http.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`App listening on port: ${port}`);
