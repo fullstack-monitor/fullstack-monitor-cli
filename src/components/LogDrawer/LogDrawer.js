@@ -12,14 +12,20 @@ import LogDetails from "./LogDetails";
 import RequestDetails from "./RequestDetails";
 import ResponseDetails from "./ResponseDetails";
 
+const DEFAULT_DRAWER_SIZE = 'xl';
+
 export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
-  const [size, setSize] = useState('xl');
+  const [size, setSize] = useState(DEFAULT_DRAWER_SIZE);
   return (
     <Drawer
       isOpen={showMoreLogInfo}
       placement="right"
       size={size}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        // This resets the drawer size each time a user exits the drawer
+        setSize(DEFAULT_DRAWER_SIZE);
+      }}
     >
       <DrawerOverlay>
         <DrawerContent>
