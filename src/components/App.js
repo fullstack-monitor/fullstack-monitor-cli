@@ -11,14 +11,18 @@ import {
   Th,
   TableCaption,
   Button,
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel,
+  Tabs,
+  Checkbox,
+  Stack,
 } from "@chakra-ui/react";
 import Log from "./Log";
 import Request from "./Request";
 import Response from "./Response";
 import { serverPort } from "../../configConstants";
-import SplitView from "./SplitView/SplitView";
-
-// click on log that should show moreinformation
 
 class App extends Component {
   constructor() {
@@ -51,13 +55,13 @@ class App extends Component {
     this.setState({
       activeLog: logs[index],
       showMoreLogInfo: !showMoreLogInfo,
+      logId: index,
     });
   };
 
   componentDidMount() {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
-      console.log("recieved message from server: ", msg);
       this.updateLogState(msg.allLogs);
     });
     socket.emit("get-initial-logs");
@@ -75,8 +79,6 @@ class App extends Component {
   };
 
   showMorelogInfo = (log) => {
-    //then write function to get more logs
-    console.log("inside showmoreloginfo function");
     this.setState({
       activeLog: log,
     });
@@ -87,78 +89,126 @@ class App extends Component {
     console.log(`this.state.logs`, logs);
     return (
       <div>
-        <Button onClick={this.deleteLogs}>Delete Logs</Button>
-        {!showMoreLogInfo && (
-          <Table variant="simple">
-            <TableCaption>Ultimate Logger</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Type</Th>
-                <Th>TimeStamp</Th>
-                <Th>Class</Th>
-                <Th>Log</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {logs.map((log, i) => {
-                switch (log.class) {
-                  case "client":
-                    return (
-                      <Log
-                        log={log}
-                        key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                        splitView={() => this.splitView(i)}
-                      />
-                    );
-                  case "server":
-                    return (
-                      <Log
-                        log={log}
-                        key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                        splitView={() => this.splitView(i)}
-                      />
-                    );
-                  case "request":
-                    return (
-                      <Request
-                        request={log}
-                        key={`${log.class}${log.method}${log.timestamp}${log.originalUri}`}
-                        splitView={() => this.splitView(i)}
-                      />
-                    );
-                  case "response":
-                    return (
-                      <Response
-                        response={log}
-                        key={`${log.class}${log.responseStatus}${log.timestamp}`}
-                        splitView={() => this.splitView(i)}
-                      />
-                    );
-                  default:
-                    return <noscript />;
-                }
-              })}
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Type</Th>
-                <Th>TimeStamp</Th>
-                <Th>Class</Th>
-                <Th>Log</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        )}
-        {showMoreLogInfo && (
-          <div onClick={() => this.setState({ showMoreLogInfo: false })}>
-            <SplitView
-              activeLog={activeLog}
-              logs={logs}
-              showMorelogInfo={this.showMorelogInfo}
-              leaveSplitView={() => this.setState({ showMoreLogInfo: false })}
-            />
+        <Tabs>
+          <TabList>
+            <div className="tabsInnerContainer">
+              <Tab>All Logs</Tab>
+              <Tab>Client Logs</Tab>
+              <Tab>Server Logs</Tab>
+              <Tab>Requests</Tab>
+              <Tab>Responses</Tab>
+              <Tab>Custom</Tab>
+            </div>
+            {/* <div> */}
+            <Button onClick={this.deleteLogs} margin="5px">Delete Logs</Button>
+            {/* </div> */}
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>{/* All logs */}</TabPanel>
+            <TabPanel>{/* Client logs */}</TabPanel>
+            <TabPanel>{/* Server logs */}</TabPanel>
+            <TabPanel>{/* Requests logs */}</TabPanel>
+            <TabPanel>{/* Responses logs */}</TabPanel>
+            <TabPanel>
+              {/* Custom logs */}
+              <Stack spacing={10} direction="row">
+                <Checkbox defaultIsChecked>Client Logs</Checkbox>
+                <Checkbox defaultIsChecked>Server Logs</Checkbox>
+                <Checkbox defaultIsChecked>Requests</Checkbox>
+                <Checkbox defaultIsChecked>Responses</Checkbox>
+              </Stack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+        <div className="tableContainer">
+          <div className="mainTableContainer">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>TimeStamp</Th>
+                  <Th>Type</Th>
+                  {!showMoreLogInfo && (
+                    <>
+                      <Th>Class</Th>
+                      <Th>Log</Th>
+                    </>
+                  )}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {logs.map((log, i) => {
+                  switch (log.class) {
+                    case "client":
+                      return (
+                        <Log
+                          log={log}
+                          key={`${log.class}${log.type}${log.timestamp}${log.log}`}
+                          splitView={() => this.splitView(i)}
+                          showMoreLogInfo={showMoreLogInfo}
+                        />
+                      );
+                    case "server":
+                      return (
+                        <Log
+                          log={log}
+                          key={`${log.class}${log.type}${log.timestamp}${log.log}`}
+                          splitView={() => this.splitView(i)}
+                          showMoreLogInfo={showMoreLogInfo}
+                        />
+                      );
+                    case "request":
+                      return (
+                        <Request
+                          request={log}
+                          key={`${log.class}${log.method}${log.timestamp}${log.originalUri}`}
+                          splitView={() => this.splitView(i)}
+                          showMoreLogInfo={showMoreLogInfo}
+                        />
+                      );
+                    case "response":
+                      return (
+                        <Response
+                          response={log}
+                          key={`${log.class}${log.responseStatus}${log.timestamp}`}
+                          splitView={() => this.splitView(i)}
+                          showMoreLogInfo={showMoreLogInfo}
+                        />
+                      );
+                    default:
+                      return <noscript />;
+                  }
+                })}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>Type</Th>
+                  <Th>TimeStamp</Th>
+                  {!showMoreLogInfo && (
+                    <>
+                      <Th>Class</Th>
+                      <Th>Log</Th>
+                    </>
+                  )}
+                </Tr>
+              </Tfoot>
+            </Table>
           </div>
-        )}
+          {showMoreLogInfo && (
+            <div className="logDetailsContainer">
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Details</Th>
+                  </Tr>
+                </Thead>
+              </Table>
+            </div>
+          )}
+        </div>
+        <Table>
+          <TableCaption>Ultimate Logger</TableCaption>
+        </Table>
       </div>
     );
   }
