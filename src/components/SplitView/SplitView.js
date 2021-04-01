@@ -33,6 +33,7 @@ export default function SplitView({ activeLog, logs, showMorelogInfo }) {
           <Thead>
             <Tr>
               <Th>Type</Th>
+              <Th>Timestamp</Th>
             </Tr>
           </Thead>
           <Tbody>
