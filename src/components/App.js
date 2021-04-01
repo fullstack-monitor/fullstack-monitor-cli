@@ -8,12 +8,11 @@ import {
   Tab,
   TabList,
   Tabs,
-  Checkbox,
-  Stack,
 } from "@chakra-ui/react";
 import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
 import LogDrawer from "./LogDrawer/LogDrawer";
+import CustomCheckboxes from "./CustomCheckboxes";
 
 class App extends Component {
   constructor() {
@@ -24,6 +23,7 @@ class App extends Component {
       }),
       logs: [],
       showMoreLogInfo: false, // switch every time you clickit
+      // showMoreLogInfo: true, // switch every time you clickit
       activeLog: {},
       logTypes: {
         client: true,
@@ -44,6 +44,7 @@ class App extends Component {
   componentDidMount() {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
+      console.log(msg.allLogs);
       this.updateLogState(msg.allLogs);
     });
     socket.emit("get-initial-logs");
@@ -71,6 +72,8 @@ class App extends Component {
       prevState.logs = logs;
       return prevState;
     });
+    // REMOVE
+    // this.setState({ activeLog: logs[2] });
   };
 
   deleteLogs = () => {
@@ -155,41 +158,10 @@ class App extends Component {
           </TabList>
         </Tabs>
         {showCustom && (
-          <Stack
-            marginTop="10px"
-            marginLeft="20px"
-            spacing={10}
-            direction="row"
-          >
-            <Checkbox
-              onChange={this.setCheckBoxes}
-              value="client"
-              isChecked={checkBoxes.client}
-            >
-              Client Logs
-            </Checkbox>
-            <Checkbox
-              onChange={this.setCheckBoxes}
-              value="server"
-              isChecked={checkBoxes.server}
-            >
-              Server Logs
-            </Checkbox>
-            <Checkbox
-              onChange={this.setCheckBoxes}
-              value="request"
-              isChecked={checkBoxes.request}
-            >
-              Requests
-            </Checkbox>
-            <Checkbox
-              onChange={this.setCheckBoxes}
-              value="response"
-              isChecked={checkBoxes.response}
-            >
-              Responses
-            </Checkbox>
-          </Stack>
+          <CustomCheckboxes
+            checkBoxes={checkBoxes}
+            setCheckBoxes={this.setCheckBoxes}
+          />
         )}
         <LogTable
           logs={logs.filter((log) => logTypes[log.class])}
