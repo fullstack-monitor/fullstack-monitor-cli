@@ -20,8 +20,8 @@ export default function LogTable({ showMoreLogInfo, splitView, logs }) {
             <Tr>
               <Th>TimeStamp</Th>
               <Th>Type</Th>
-              <Th>Class</Th>
-              <Th>Log</Th>
+              <Th>Class / Method / Status</Th>
+              <Th>Log / Endpoint / Response Data</Th>
             </Tr>
           </Thead>
           <Tbody>

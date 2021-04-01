@@ -12,6 +12,9 @@ import {
   FormLabel,
   Text,
 } from "@chakra-ui/react";
+import LogDetails from "./LogDetails";
+import RequestDetails from "./RequestDetails";
+import ResponseDetails from "./ResponseDetails";
 
 export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
   return (
@@ -19,6 +22,7 @@ export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
       isOpen={showMoreLogInfo}
       placement="right"
       size="xl"
+      // size="full"
       onClose={onClose}
     >
       <DrawerOverlay>
@@ -28,26 +32,12 @@ export default function LogDrawer({ showMoreLogInfo, onClose, activeLog }) {
             Log Details
           </DrawerHeader>
 
-          <DrawerBody>
-            <Stack spacing="24px">
-              <Box display="flex">
-                <FormLabel>Timestamp:</FormLabel>
-                <Text>{activeLog.timestamp}</Text>
-              </Box>
-              <Box display="flex">
-                <FormLabel>Type:</FormLabel>
-                <Text>{activeLog.class}</Text>
-              </Box>
-              <Box display="flex">
-                <FormLabel>Class:</FormLabel>
-                <Text>{activeLog.type}</Text>
-              </Box>
-              <Box display="flex">
-                <FormLabel>Log:</FormLabel>
-                <Text>{activeLog.log}</Text>
-              </Box>
-            </Stack>
-          </DrawerBody>
+          { (activeLog.class === 'client' || activeLog.class === 'server')
+            && <LogDetails activeLog={activeLog} />}
+          { activeLog.class === 'request'
+            && <RequestDetails activeLog={activeLog} />}
+          { activeLog.class === 'response'
+            && <ResponseDetails activeLog={activeLog} />}
 
           <DrawerFooter borderTopWidth="1px">
             <Text>Full Stack Monitor</Text>

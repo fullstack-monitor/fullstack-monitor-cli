@@ -23,8 +23,8 @@ class App extends Component {
         transports: ["websocket"],
       }),
       logs: [],
-      showMoreLogInfo: false, // switch every time you clickit
-      // showMoreLogInfo: true, // switch every time you clickit
+      // showMoreLogInfo: false, // switch every time you clickit
+      showMoreLogInfo: true, // switch every time you clickit
       logId: null,
       // activeLog: {},
       activeLog: {},
@@ -53,7 +53,7 @@ class App extends Component {
       return prevState;
     });
     // REMOVE
-    // this.setState({ activeLog: logs[0] })
+    this.setState({ activeLog: logs[0] })
   };
 
   splitView = (index) => {
