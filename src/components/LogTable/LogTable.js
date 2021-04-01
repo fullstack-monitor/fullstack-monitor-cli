@@ -6,20 +6,10 @@ import {
   Tfoot,
   Tr,
   Th,
-  TableCaption,
-  Button,
-  Tab,
-  TabList,
-  TabPanels,
-  TabPanel,
-  Tabs,
-  Checkbox,
-  Stack,
 } from "@chakra-ui/react";
 import Log from "./Log";
 import Request from "./Request";
 import Response from "./Response";
-import { serverPort } from "../../configConstants";
 
 export default function LogTable({ showMoreLogInfo, splitView, logs }) {
   return (

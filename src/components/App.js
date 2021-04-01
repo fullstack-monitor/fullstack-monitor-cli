@@ -28,7 +28,7 @@ import {
   Textarea,
   Text,
 } from "@chakra-ui/react";
-import LogTable from "./LogTable";
+import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
 
 class App extends Component {
