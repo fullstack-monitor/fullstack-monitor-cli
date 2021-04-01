@@ -18,8 +18,8 @@ class App extends Component {
         transports: ["websocket"],
       }),
       logs: [],
-      showMoreLogInfo: false, // switch every time you clickit
-      // showMoreLogInfo: true, // switch every time you clickit
+      // showMoreLogInfo: false, // switch every time you clickit
+      showMoreLogInfo: true, // switch every time you clickit
       activeLog: {},
       logTypes: {
         client: true,
@@ -69,7 +69,7 @@ class App extends Component {
       return prevState;
     }, () => window.scrollTo(0, document.body.scrollHeight));
     // REMOVE
-    // this.setState({ activeLog: logs[1] });
+    this.setState({ activeLog: logs[2] });
   };
 
   deleteLogs = () => {
@@ -146,6 +146,7 @@ class App extends Component {
           showCustom={showCustom}
         />
         <LogTable
+          activeLog={activeLog}
           logs={logs.filter((log) => logTypes[log.class])}
           showMoreLogInfo={showMoreLogInfo}
           splitView={this.splitView}
