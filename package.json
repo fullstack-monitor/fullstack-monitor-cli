@@ -10,6 +10,11 @@
     "build": "npx webpack --config webpack.config.js",
     "test": "jest"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "server/data/*"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +25,7 @@
     "@chakra-ui/react": "^1.4.1",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
+    "ansi": "^0.3.1",
     "autoprefixer": "^10.2.5",
     "babel-loader": "^8.2.2",
     "cors": "^2.8.5",

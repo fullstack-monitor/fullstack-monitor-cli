@@ -1,29 +1,18 @@
-const express = require('express');
-const { io } = require('../../config');
-
+const { io } = require("../../config");
 const loggerController = require('../controllers/loggerController');
 
-const router = express.Router();
+function socketRouter() {
+  // Setup socket routes on initial connection with client
+  io.on("connection", (socket) => {
+    // Send logs to FE on first page load
+    socket.on('get-initial-logs', loggerController.getAllLogs);
 
-const webSocketMiddleware = (req, res, next) => {
-  io.emit('chat message', res.locals.logs);
-  next();
-};
+    // Store logs
+    socket.on('store-logs', loggerController.storeLogs);
 
-router.get('/logs',
-  loggerController.getLogs,
-  (req, res) => res.status(200).json(res.locals.logs));
+    // Delete logs
+    socket.on('delete-logs', loggerController.deleteLogs);
+  });
+}
 
-router.post('/logs/:type',
-  loggerController.addLogs,
-  loggerController.getLogs,
-  webSocketMiddleware,
-  (req, res) => res.status(200).json(`Added ${req.params.type} logs`));
-
-router.post('/requests',
-  loggerController.addRequests,
-  loggerController.getLogs,
-  webSocketMiddleware,
-  (req, res) => res.status(200).json('Requests added!'));
-
-module.exports = router;
+module.exports = socketRouter;

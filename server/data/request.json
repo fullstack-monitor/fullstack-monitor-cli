@@ -1,1 +1,0 @@
-[{"timestamp":"Sat, 27 Mar 2021 18:23:58 GMT","fromIP":"::ffff:127.0.0.1","method":"DELETE","originalUri":"/api/favs/7","uri":"/7","requestData":{"id":"7"},"referer":"http://localhost:8080/","responseData":"","responseStatus":"200"}]
