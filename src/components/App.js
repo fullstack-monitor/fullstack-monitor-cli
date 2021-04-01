@@ -11,26 +11,10 @@ import {
   Tabs,
   Checkbox,
   Stack,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Box,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  Select,
-  Textarea,
-  Text,
 } from "@chakra-ui/react";
 import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
-
+import LogDrawer from "./LogDrawer/LogDrawer";
 class App extends Component {
   constructor() {
     super();
@@ -56,7 +40,7 @@ class App extends Component {
         request: true,
         response: true,
       },
-      showCustom: false
+      showCustom: false,
     };
   }
 
@@ -109,7 +93,7 @@ class App extends Component {
   filterLogs = (type) => {
     const { checkBoxes } = this.state;
     switch (type) {
-      case 'all':
+      case "all":
         this.setState({
           logTypes: {
             client: true,
@@ -117,21 +101,21 @@ class App extends Component {
             request: true,
             response: true,
           },
-          showCustom: false
+          showCustom: false,
         });
         break;
-      case 'client':
-      case 'server':
-      case 'request':
-      case 'response':
+      case "client":
+      case "server":
+      case "request":
+      case "response":
         this.setState({
           logTypes: {
             [type]: true,
           },
-          showCustom: false
+          showCustom: false,
         });
         break;
-      case 'custom':
+      case "custom":
         this.setState({
           logTypes: checkBoxes,
           showCustom: true,
@@ -145,13 +129,20 @@ class App extends Component {
   setCheckBoxes = (e) => {
     const { value: type, checked } = e.target;
     const { checkBoxes } = this.state;
-    const newCheckBoxes = {...checkBoxes}
+    const newCheckBoxes = { ...checkBoxes };
     newCheckBoxes[type] = checked;
     this.setState({ checkBoxes: newCheckBoxes, logTypes: newCheckBoxes });
-  }
+  };
 
   render() {
-    const { logs, showMoreLogInfo, showCustom, logTypes, checkBoxes, activeLog } = this.state;
+    const {
+      logs,
+      showMoreLogInfo,
+      showCustom,
+      logTypes,
+      checkBoxes,
+      activeLog,
+    } = this.state;
     return (
       <div>
         <Tabs>
@@ -169,14 +160,43 @@ class App extends Component {
             </Button>
           </TabList>
         </Tabs>
-        { showCustom &&
-          <Stack margin="5px" spacing={10} direction="row">
-            <Checkbox onChange={this.setCheckBoxes} value="client" isChecked={checkBoxes.client}>Client Logs</Checkbox>
-            <Checkbox onChange={this.setCheckBoxes} value="server" isChecked={checkBoxes.server}>Server Logs</Checkbox>
-            <Checkbox onChange={this.setCheckBoxes} value="request" isChecked={checkBoxes.request}>Requests</Checkbox>
-            <Checkbox onChange={this.setCheckBoxes} value="response" isChecked={checkBoxes.response}>Responses</Checkbox>
+        {showCustom && (
+          <Stack
+            marginTop="10px"
+            marginLeft="20px"
+            spacing={10}
+            direction="row"
+          >
+            <Checkbox
+              onChange={this.setCheckBoxes}
+              value="client"
+              isChecked={checkBoxes.client}
+            >
+              Client Logs
+            </Checkbox>
+            <Checkbox
+              onChange={this.setCheckBoxes}
+              value="server"
+              isChecked={checkBoxes.server}
+            >
+              Server Logs
+            </Checkbox>
+            <Checkbox
+              onChange={this.setCheckBoxes}
+              value="request"
+              isChecked={checkBoxes.request}
+            >
+              Requests
+            </Checkbox>
+            <Checkbox
+              onChange={this.setCheckBoxes}
+              value="response"
+              isChecked={checkBoxes.response}
+            >
+              Responses
+            </Checkbox>
           </Stack>
-        }
+        )}
         <LogTable
           logs={logs.filter((log) => logTypes[log.class])}
           showMoreLogInfo={showMoreLogInfo}
@@ -185,46 +205,11 @@ class App extends Component {
         <Table>
           <TableCaption>Ultimate Logger</TableCaption>
         </Table>
-        <Drawer
-          isOpen={showMoreLogInfo}
-          placement="right"
-          size="xl"
+        <LogDrawer
+          showMoreLogInfo={showMoreLogInfo}
+          activeLog={activeLog}
           onClose={() => this.setState({ showMoreLogInfo: false })}
-        >
-          <DrawerOverlay>
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader borderBottomWidth="1px">
-                Log Details
-              </DrawerHeader>
-
-              <DrawerBody>
-                <Stack spacing="24px">
-                  <Box display="flex">
-                    <FormLabel>Timestamp:</FormLabel>
-                    <Text>{activeLog.timestamp}</Text>
-                  </Box>
-                  <Box display="flex">
-                    <FormLabel>Type:</FormLabel>
-                    <Text>{activeLog.class}</Text>
-                  </Box>
-                  <Box display="flex">
-                    <FormLabel>Class:</FormLabel>
-                    <Text>{activeLog.type}</Text>
-                  </Box>
-                  <Box display="flex">
-                    <FormLabel>Log:</FormLabel>
-                    <Text>{activeLog.log}</Text>
-                  </Box>
-                </Stack>
-              </DrawerBody>
-
-              <DrawerFooter borderTopWidth="1px">
-                <Text>Full Stack Monitor</Text>
-              </DrawerFooter>
-            </DrawerContent>
-          </DrawerOverlay>
-        </Drawer>
+        />
       </div>
     );
   }
