@@ -1,6 +1,12 @@
 #!/bin/bash
 cd $(npm root -g)/fullstack-monitor-cli
 
+print_link() {
+  echo "  
+  For more infomation view the project repo here: https://github.com/PFA-Pink-Fairy-Armadillo/fullstack-monitor-cli
+  "
+}
+
 print_tutorial() {
   echo "
     - The basics -
@@ -101,6 +107,7 @@ elif [[ $1 == '--tutorial' || $1 == '-t' || $2 == '--tutorial' || $2 == '-t'  ]]
 elif [[ $1 == '--help' || $1 == '-h' || $2 == '--help' || $2 == '-h'  ]]; then
   print_intro
   print_help
+  print_link
 elif [[ $1 == '--start-listen' || $1 == '-sl' || $2 == '--start-listen' || $2 == '-sl'  ]]; then
   start_server
   listen_in_terminal
@@ -113,4 +120,5 @@ elif [[ $1 == '--start-listen-both' || $1 == '-slb' || $2 == '--start-listen-bot
   listen_in_terminal
 else
   print_intro
+  print_link
 fi
