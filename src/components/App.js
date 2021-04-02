@@ -19,7 +19,6 @@ class App extends Component {
       }),
       logs: [],
       showMoreLogInfo: false, // switch every time you clickit
-      // showMoreLogInfo: true, // switch every time you clickit
       activeLog: {},
       logTypes: {
         client: true,
@@ -68,8 +67,6 @@ class App extends Component {
       prevState.logs = logs;
       return prevState;
     }, () => window.scrollTo(0, document.body.scrollHeight));
-    // REMOVE
-    // this.setState({ activeLog: logs[2] });
   };
 
   deleteLogs = () => {

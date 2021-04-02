@@ -1,29 +1,42 @@
 const NO_DATA_RESPONSE = 'No data.';
 const MAX_STRING_LENGTH = 50;
 
+function isNoDataReq(data) {
+  if (data === '""') return true;
+  if (!data.length) return true;
+  if (data === "{}") return true;
+  return false;
+}
+
+function isNoDataLog(data) {
+  if (data === '""') return true;
+  if (!data.length) return true;
+  return false;
+}
+
 export const sanitizeAndShortenRequestResponseData = (data) => {
   let dataString = JSON.stringify(data);
-  dataString = dataString === "{}" ? NO_DATA_RESPONSE : dataString;
+  dataString = isNoDataReq(dataString) ? NO_DATA_RESPONSE : dataString;
   if (dataString.length > MAX_STRING_LENGTH) dataString = `${dataString.slice(0, MAX_STRING_LENGTH)}...`;
   return dataString;
 };
 
 export const sanitizeAndShortenLogData = (data) => {
   let dataString = JSON.stringify(data);
-  dataString = dataString === "" ? NO_DATA_RESPONSE : dataString;
+  dataString = isNoDataLog(dataString) ? NO_DATA_RESPONSE : dataString;
   if (dataString.length > MAX_STRING_LENGTH) dataString = `${dataString.slice(0, MAX_STRING_LENGTH)}...`;
   return dataString;
 };
 
 export const sanitizeRequestResponseData = (data) => {
   let dataString = JSON.stringify(data);
-  dataString = dataString === "{}" ? NO_DATA_RESPONSE : dataString;
+  dataString = isNoDataReq(dataString) ? NO_DATA_RESPONSE : dataString;
   return dataString;
 };
 
 export const sanitizeLogData = (data) => {
   let dataString = JSON.stringify(data);
-  dataString = dataString === "" ? NO_DATA_RESPONSE : dataString;
+  dataString = isNoDataLog(dataString) ? NO_DATA_RESPONSE : dataString;
   return dataString;
 };
 
