@@ -1,15 +1,124 @@
 #!/bin/bash
+cd $(npm root -g)/fullstack-monitor-cli
 
-if [[ $1 == '--listen' || $1 == '-l' ]]; then
-  node ./server/cmdApp/cmd.js;
-elif [[ $1 == '--kill' || $1 == '-k' ]]; then
-  pkill -f ./server/index.js
-elif [[ $1 == '--start' || $1 == '-s' ]]; then
-  node ./server/index.js &
-elif [[ $1 == '--help' || $1 == '-h' ]]; then
-  echo "To start the server: --start OR -s"
-  echo "To listen to traffic: --listen OR -l"
-  echo "To kill the server: --kill OR -k"
+print_link() {
+  echo "  
+  For more infomation view the project repo here: https://github.com/PFA-Pink-Fairy-Armadillo/fullstack-monitor-cli
+  "
+}
+
+print_tutorial() {
+  echo "
+    - The basics -
+    1. First start the server.
+    2. Then listen to the server in the terminal.
+    3. And/or listen to the server in the chrome browser.
+    4. Then when you are done kill the server.
+
+    $ fullstack-monitor-cli --start
+    $ fullstack-monitor-cli --listen
+    $ fullstack-monitor-cli --chrome
+    $ fullstack-monitor-cli --kill
+
+    - Start the server and listen in one command -
+    1. Run the --start-listen command.
+
+    $ fullstack-monitor-cli --start-listen
+      OR
+    $ fullstack-monitor-cli -sl
+  "
+}
+
+print_help() {
+  echo "
+    The server runs on port 3861 by default.
+    
+    To log monitoring data on the server, you must install fullstack-monitor on one of your projects, using:
+    
+    $ npm install fullstack-monitor
+    
+    Then when you run that project and the fullstack-monitor-cli server at the same time, logging and request
+    data will be stored on the fullstack-monitor-cli server, and viewable on the fullstack-monitor-cli clients.
+  "
+}
+
+print_intro() {
+  echo "
+  Usage: fullstack-monitor-cli [options]
+
+  Options:
+
+    -h, --help                                Output usage information
+    -t, --tutorial                            View a brief tutorial
+    -s, --start                               Start the server
+    -l, --listen                              Listen to the traffic in the terminal
+    -c, --chrome                              Listen to the traffic in the chrome
+    -k, --kill                                Kill the server
+    -r, --restart                             Restart the server
+    -sl, --start-listen                       Start the server and listen in the terminal
+    -slc, --start-listen-chrome               Start the server and listen in the chrome browser
+    -slb, --start-listen-both                 Start the server and listen in the terminal and chrome browser
+  "
+}
+
+listen_in_terminal() {
+  echo 'Listening on port: http://localhost:3861/'
+  node server/cmdApp/cmd.js;
+}
+
+kill_server() {
+  if lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+    pkill -f server/index.js
+    echo 'Server shut down.'
+  else
+    echo "Server is already shutdown."
+  fi
+
+}
+
+start_server() {
+  if lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+    echo "Server is already running."
+  else
+    node server/index.js &
+    echo 'Server booted on http://localhost:3861/'
+  fi
+}
+
+open_chrome() {
+  echo 'Opening Google Chrome at http://localhost:3861/'
+  open -a "Google Chrome" http://localhost:3861/
+}
+
+
+if [[ $1 == '--listen' || $1 == '-l' || $2 == '--listen' || $2 == '-l' ]]; then
+  listen_in_terminal
+elif [[ $1 == '--kill' || $1 == '-k'  || $2 == '--kill' || $2 == '-k' ]]; then
+  kill_server
+elif [[ $1 == '--restart' || $1 == '-r' || $2 == '--restart' || $2 == '-r' ]]; then
+  kill_server
+  start_server
+elif [[ $1 == '--start' || $1 == '-s' || $2 == '--start' || $2 == '-s'  ]]; then
+  start_server
+elif [[ $1 == '--chrome' || $1 == '-c' || $2 == '--chrome' || $2 == '-c'  ]]; then
+  open_chrome
+elif [[ $1 == '--tutorial' || $1 == '-t' || $2 == '--tutorial' || $2 == '-t'  ]]; then
+  print_tutorial
+elif [[ $1 == '--help' || $1 == '-h' || $2 == '--help' || $2 == '-h'  ]]; then
+  print_intro
+  print_help
+  print_link
+elif [[ $1 == '--start-listen' || $1 == '-sl' || $2 == '--start-listen' || $2 == '-sl'  ]]; then
+  start_server
+  listen_in_terminal
+elif [[ $1 == '--start-listen-chrome' || $1 == '-slc' || $2 == '--start-listen-chrome' || $2 == '-slc'  ]]; then
+  start_server
+  open_chrome
+elif [[ $1 == '--start-listen-both' || $1 == '-slb' || $2 == '--start-listen-both' || $2 == '-slb'  ]]; then
+  start_server
+  open_chrome
+  listen_in_terminal
 else
-  echo "For instructions: --help OR -h"
+  print_intro
+  print_link
 fi

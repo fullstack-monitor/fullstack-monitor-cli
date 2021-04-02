@@ -1,16 +1,4 @@
-* {
-  background:lightblue; 
+.tabsInnerContainer {
+  display: flex;
+  width: 100%;
 }
-
-::-moz-placeholder {
-  color: gray;
-}
-
-:-ms-input-placeholder {
-  color: gray;
-}
-
-::placeholder {
-  color: gray;
-}
-
