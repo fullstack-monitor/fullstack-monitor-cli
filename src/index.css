@@ -5,3 +5,8 @@
 ::placeholder {
   color: gray;
 } */
+
+.tabsInnerContainer {
+  display: flex;
+  width: 100%;
+}
