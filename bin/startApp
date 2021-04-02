@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $1 == '--listen' || $1 == '-l' ]]; then
+  node ./server/cmdApp/cmd.js;
+elif [[ $1 == '--kill' || $1 == '-k' ]]; then
+  pkill -f ./server/index.js
+elif [[ $1 == '--start' || $1 == '-s' ]]; then
+  node ./server/index.js &
+elif [[ $1 == '--help' || $1 == '-h' ]]; then
+  echo "To start the server: --start OR -s"
+  echo "To listen to traffic: --listen OR -l"
+  echo "To kill the server: --kill OR -k"
+else
+  echo "For instructions: --help OR -h"
+fi

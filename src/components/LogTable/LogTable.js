@@ -37,7 +37,6 @@ export default function LogTable({
               color: 'white'
             };
           }
-
           switch (log.class) {
             case "client":
             case "server":
@@ -46,7 +45,7 @@ export default function LogTable({
                   styleObj={styleObj}
                   log={log}
                   key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                  splitView={() => splitView(i)}
+                  splitView={() => splitView(log.id)}
                 />
               );
             case "request":
@@ -55,7 +54,7 @@ export default function LogTable({
                   styleObj={styleObj}
                   request={log}
                   key={`${log.class}${log.method}${log.timestamp}${log.originalUri}`}
-                  splitView={() => splitView(i)}
+                  splitView={() => splitView(log.id)}
                 />
               );
             case "response":
@@ -64,7 +63,7 @@ export default function LogTable({
                   styleObj={styleObj}
                   response={log}
                   key={`${log.class}${log.responseStatus}${log.timestamp}`}
-                  splitView={() => splitView(i)}
+                  splitView={() => splitView(log.id)}
                 />
               );
             default:

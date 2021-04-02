@@ -39,7 +39,6 @@ class App extends Component {
   componentDidMount() {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
-      console.log(msg.allLogs);
       this.updateLogState(msg.allLogs);
     });
     socket.emit("get-initial-logs");
@@ -62,7 +61,7 @@ class App extends Component {
   updateLogState = (logs) => {
     this.setState((prevState) => {
       logs.forEach((log, index) => {
-        log.id = `logs${index}`;
+        log.id = index;
       });
       prevState.logs = logs;
       return prevState;
@@ -150,7 +149,7 @@ class App extends Component {
           splitView={this.splitView}
         />
         <Table>
-          <TableCaption>Ultimate Logger</TableCaption>
+          <TableCaption>Fullstack Monitor</TableCaption>
         </Table>
         <LogDrawer
           showMoreLogInfo={showMoreLogInfo}
