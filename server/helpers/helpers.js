@@ -86,10 +86,12 @@ helpers.deleteOldLogs = async () => {
 
 // method to read all logs from allLogs.json file
 helpers.getAllLogs = async () => {
+  // read allLogs.json file and parse JSON data
   const logs = await JSON.parse(
     fs.readFileSync(path.resolve(__dirname, "../data/allLogs.json"), "utf8")
   );
 
+  // error handling
   if (!logs) throw Error("./server/helpers/helpers: getAllLogs: No logs found.");
 
   return logs;
@@ -134,8 +136,10 @@ helpers.storeLogs = async (logs) => {
 
 // method to delete allLog.json file
 helpers.deleteLogs = async () => {
+  // invoke function to delete all old logs. Example: allLogs1xx.json
   helpers.deleteOldLogs();
 
+  // overwrite allLogs.json file with empty array
   const res = await fs.writeFileSync(
     path.resolve(__dirname, "../data/allLogs.json"),
     JSON.stringify([]),
