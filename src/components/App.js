@@ -150,7 +150,7 @@ class App extends Component {
           splitView={this.splitView}
         />
         <Table>
-          <TableCaption>Ultimate Logger</TableCaption>
+          <TableCaption>Fullstack Monitor</TableCaption>
         </Table>
         <LogDrawer
           showMoreLogInfo={showMoreLogInfo}
