@@ -3,19 +3,12 @@ import "../index.css";
 import { io } from "socket.io-client";
 import {
   Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
   TableCaption,
-  Button,
 } from "@chakra-ui/react";
-import Log from "./Log";
-import Request from "./Request";
-import Response from "./Response";
+import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
+import LogDrawer from "./LogDrawer/LogDrawer";
+import IntelligentHeader from "./IntelligentHeader/IntelligentHeader";
 
 class App extends Component {
   constructor() {
@@ -25,14 +18,29 @@ class App extends Component {
         transports: ["websocket"],
       }),
       logs: [],
+      showMoreLogInfo: false, // switch every time you clickit
+      activeLog: {},
+      logTypes: {
+        client: true,
+        server: true,
+        request: true,
+        response: true,
+      },
+      checkBoxes: {
+        client: true,
+        server: true,
+        request: true,
+        response: true,
+      },
+      showCustom: false,
     };
   }
 
   componentDidMount() {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
-      console.log("recieved message from server: ", msg);
-      this.setState({ logs: msg.allLogs });
+      console.log(msg.allLogs);
+      this.updateLogState(msg.allLogs);
     });
     socket.emit("get-initial-logs");
   }
@@ -43,72 +51,112 @@ class App extends Component {
     socket.off("get-initial-logs");
   }
 
+  splitView = (index) => {
+    const { logs, showMoreLogInfo } = this.state;
+    this.setState({
+      activeLog: logs[index],
+      showMoreLogInfo: !showMoreLogInfo,
+    });
+  };
+
+  updateLogState = (logs) => {
+    this.setState((prevState) => {
+      logs.forEach((log, index) => {
+        log.id = `logs${index}`;
+      });
+      prevState.logs = logs;
+      return prevState;
+    }, () => window.scrollTo(0, document.body.scrollHeight));
+  };
+
   deleteLogs = () => {
     const { socket } = this.state;
     socket.emit("delete-logs", true);
   };
 
+  showMorelogInfo = (log) => {
+    this.setState({
+      activeLog: log,
+    });
+  };
+
+  filterLogs = (type) => {
+    const { checkBoxes } = this.state;
+    switch (type) {
+      case "all":
+        this.setState({
+          logTypes: {
+            client: true,
+            server: true,
+            request: true,
+            response: true,
+          },
+          showCustom: false,
+        });
+        break;
+      case "client":
+      case "server":
+      case "request":
+      case "response":
+        this.setState({
+          logTypes: {
+            [type]: true,
+          },
+          showCustom: false,
+        });
+        break;
+      case "custom":
+        this.setState({
+          logTypes: checkBoxes,
+          showCustom: true,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  setCheckBoxes = (e) => {
+    const { value: type, checked } = e.target;
+    const { checkBoxes } = this.state;
+    const newCheckBoxes = { ...checkBoxes };
+    newCheckBoxes[type] = checked;
+    this.setState({ checkBoxes: newCheckBoxes, logTypes: newCheckBoxes });
+  };
+
   render() {
-    const { logs } = this.state;
-    console.log(`this.state.logs`, logs);
+    const {
+      logs,
+      showMoreLogInfo,
+      showCustom,
+      logTypes,
+      checkBoxes,
+      activeLog,
+    } = this.state;
     return (
       <div>
-        <Button onClick={this.deleteLogs}>Delete Logs</Button>
-        <Table variant="simple">
+        <IntelligentHeader
+          filterLogs={this.filterLogs}
+          deleteLogs={this.deleteLogs}
+          setCheckBoxes={this.setCheckBoxes}
+          checkBoxes={checkBoxes}
+          showCustom={showCustom}
+        />
+        <LogTable
+          logTypes={logTypes}
+          activeLog={activeLog}
+          logs={logs.filter((log) => logTypes[log.class])}
+          showMoreLogInfo={showMoreLogInfo}
+          splitView={this.splitView}
+        />
+        <Table>
           <TableCaption>Ultimate Logger</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Type</Th>
-              <Th>TimeStamp</Th>
-              <Th>Class</Th>
-              <Th>Log</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {logs.map((log) => {
-              switch (log.class) {
-                case "client":
-                  return (
-                    <Log
-                      log={log}
-                      key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                    />
-                  );
-                case "server":
-                  return (
-                    <Log
-                      log={log}
-                      key={`${log.class}${log.type}${log.timestamp}${log.log}`}
-                    />
-                  );
-                case "request":
-                  return (
-                    <Request
-                      request={log}
-                      key={`${log.class}${log.method}${log.timestamp}${log.originalUri}`}
-                    />
-                  );
-                case "response":
-                  return (
-                    <Response
-                      response={log}
-                      key={`${log.class}${log.responseStatus}${log.timestamp}`}
-                    />
-                  );
-                default:
-                  return <noscript />;
-              }
-            })}
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>Type</Th>
-              <Th>TimeStamp</Th>
-              <Th>Class</Th>
-              <Th>Log</Th>
-            </Tr>
-          </Tfoot>
         </Table>
+        <LogDrawer
+          showMoreLogInfo={showMoreLogInfo}
+          activeLog={activeLog}
+          onClose={() => this.setState({ showMoreLogInfo: false })}
+        />
       </div>
     );
   }
