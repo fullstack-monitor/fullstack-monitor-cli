@@ -11,19 +11,21 @@ import {
 import Log from "./Log";
 import Request from "./Request";
 import Response from "./Response";
+import { getHeaderTitles } from "../../helpers/helpers";
 
 export default function LogTable({
-  activeLog, showMoreLogInfo, splitView, logs
+  activeLog, showMoreLogInfo, splitView, logs, logTypes
 }) {
   const messengerBlue = useToken("colors", "messenger.400");
+  const [colTitle1, colTitle2, colTitle3, colTitle4] = getHeaderTitles(logTypes);
   return (
     <Table variant="simple">
       <Thead>
         <Tr>
-          <Th>TimeStamp</Th>
-          <Th>Type</Th>
-          <Th>Class / Referer / Endpoint</Th>
-          <Th>Log / Data</Th>
+          <Th>{colTitle1}</Th>
+          <Th>{colTitle2}</Th>
+          <Th>{colTitle3}</Th>
+          <Th>{colTitle4}</Th>
         </Tr>
       </Thead>
       <Tbody>
