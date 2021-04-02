@@ -107,6 +107,7 @@ helpers.storeLogs = async (logs) => {
 
   let data;
 
+  // error handling if reading allLogs.json file throws an error
   try {
     data = await helpers.getAllLogs();
   } catch (e) {
