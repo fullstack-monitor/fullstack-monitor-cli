@@ -40,5 +40,5 @@ app.use((err, req, res, next) => {
 // listens on port -> http://localhost:${port}/
 http.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`App listening on port: ${port}`);
+  // console.log(`App listening on port: ${port}`);
 });
