@@ -1,5 +1,13 @@
 # Fullstack-Monitor-CLI
 
+- [Fullstack-Monitor-CLI](#fullstack-monitor-cli)
+  - [About](#about)
+  - [Browser Interface](#browser-interface)
+  - [Command Line Interface](#command-line-interface)
+  - [Instructions](#instructions)
+  - [Example Project](#example-project)
+  - [Contributors](#contributors)
+
 ## About
 Fullstack-monitor-CLI is log monitoring tools for developers, offering visibility of console logs, requests and responses from both the Client and Server side of your application in one single place.
 
@@ -12,6 +20,22 @@ In order to use this, you must also install the [Fullstack-Monitor](https://gith
 
 - [Fullstack-Monitor-CLI NPM Package](https://www.npmjs.com/package/fullstack-monitor-cli).
 
+## Browser Interface
+
+- This is what the browser interface looks like, when monitoring a fullstack application. You can see Client and Server logs, and requests and responses between the Client and the Server.
+- You can use use the `--chrome` command to open this view in the Google Chrome browser, or navigate to `localhost:3861` in your browser of choice, the application is served by default, once you have started the server using `--start`.
+
+![](./images/2021-04-03-19-28-23.png)
+
+## Command Line Interface
+
+- Here you can see an overview of the CLI commands:
+
+![](./images/2021-04-03-19-30-18.png)
+
+- Here is the view using the `--listen` command, where you can see ane example  the logs, requests and responses of a fullstack application being monitored in one place.
+
+![](./images/2021-04-03-19-31-25.png)
 
 ## Instructions
 
@@ -41,9 +65,15 @@ $ fullstack-monitor-cli --listen
 $ fullstack-monitor-cli --kill
 ```
 
+## Example Project
+
+For an example of `Fullstack-Monitor` installed on a project see this GitHub Repo here:
+
+- [Example-Project](https://github.com/PFA-Pink-Fairy-Armadillo/Example-Project)
+
 ## Contributors
 
-- Paulo
-- Tom
-- Aye
-- Mohammed
+- [Paulo Choi](https://github.com/paulochoi)
+- [Aye Moe](https://github.com/ayemmoe)
+- [Mohammed Naser](https://github.com/mnaser11218)
+- [Tom Harper](https://github.com/tommyrharper)
