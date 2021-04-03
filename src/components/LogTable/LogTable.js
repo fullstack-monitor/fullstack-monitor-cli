@@ -17,6 +17,7 @@ export default function LogTable({
   activeLog, showMoreLogInfo, splitView, logs, logTypes
 }) {
   const messengerBlue = useToken("colors", "messenger.400");
+  // Assign titles dynamically depending on which types of logs the user is viewing
   const [colTitle1, colTitle2, colTitle3, colTitle4] = getHeaderTitles(logTypes);
   return (
     <Table variant="simple">
