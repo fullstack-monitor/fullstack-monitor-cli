@@ -94,6 +94,20 @@ helpers.storeLogs = async (logs) => {
     data.push(logs);
   }
 
+  function replaceGlobally(original, searchTxt, replaceTxt) {
+    const regex = new RegExp(searchTxt, 'g');
+    return original.replace(regex, replaceTxt);
+  }
+
+  // Sort the data by timestamp
+  // Currently this is based on hour, minute, second and milli-second
+  // This needs updating to sort based on month-day-year as well.
+  data.sort((a, b) => {
+    const hourA = replaceGlobally(a.timestamp.slice(-12), ':', '');
+    const hourB = replaceGlobally(b.timestamp.slice(-12), ':', '');
+    return hourA - hourB;
+  });
+
   // write data that holds existing requests and new request to request.json
   fs.writeFileSync(
     path.resolve(__dirname, "../data/allLogs.json"),
