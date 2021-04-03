@@ -61,11 +61,6 @@ print_intro() {
   "
 }
 
-listen_in_terminal() {
-  echo 'Listening on port: http://localhost:3861/'
-  node server/cmdApp/cmd.js;
-}
-
 kill_server() {
   if lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
     pkill -f server/index.js
@@ -73,7 +68,6 @@ kill_server() {
   else
     echo "Server is already shutdown."
   fi
-
 }
 
 start_server() {
@@ -83,6 +77,14 @@ start_server() {
     node server/index.js &
     echo 'Server booted on http://localhost:3861/'
   fi
+}
+
+listen_in_terminal() {
+  if ! lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+    start_server
+  fi
+  echo 'Listening on port: http://localhost:3861/'
+  node server/cmdApp/cmd.js;
 }
 
 open_chrome() {
