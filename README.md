@@ -1,14 +1,14 @@
-# Fullstack-Monitor-CLI
+![](./images/Fullstack-Monitor-CLI-banner.jpeg)
 
-- [Fullstack-Monitor-CLI](#fullstack-monitor-cli)
-  - [About](#about)
+
+- [About](#about)
   - [Browser Interface](#browser-interface)
   - [Command Line Interface](#command-line-interface)
   - [Instructions](#instructions)
   - [Example Project](#example-project)
   - [Contributors](#contributors)
 
-## About
+# About
 Fullstack-monitor-CLI is log monitoring tools for developers, offering visibility of console logs, requests and responses from both the Client and Server side of your application in one single place.
 
 This makes it easy to see what is happening across the stack as your front and back-end communicate.
