@@ -48,16 +48,16 @@ print_intro() {
 
   Options:
 
-    -h, --help                                Output usage information
-    -t, --tutorial                            View a brief tutorial
-    -s, --start                               Start the server
-    -l, --listen                              Listen to the traffic in the terminal
-    -c, --chrome                              Listen to the traffic in the chrome
-    -k, --kill                                Kill the server
-    -r, --restart                             Restart the server
-    -sl, --start-listen                       Start the server and listen in the terminal
-    -slc, --start-listen-chrome               Start the server and listen in the chrome browser
-    -slb, --start-listen-both                 Start the server and listen in the terminal and chrome browser
+    -h, --help                        Output usage information
+    -t, --tutorial                    View a brief tutorial
+    -s, --start                       Start the server
+    -l, --listen                      Listen to the traffic in the terminal
+    -c, --chrome                      Listen to the traffic in the chrome
+    -k, --kill                        Kill the server
+    -r, --restart                     Restart the server
+    -sl, --start-listen               Start the server and listen in the terminal
+    -slc, --start-listen-chrome       Start the server and listen in the chrome browser
+    -slb, --start-listen-both         Start the server and listen in the terminal and chrome browser
   "
 }
 
