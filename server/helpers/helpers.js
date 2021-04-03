@@ -4,70 +4,100 @@ const path = require("path");
 // set the current file limit to split
 // 1000 for 1k byte
 const FILE_LIMIT = 10000000; // 10MB
+
+// starting number of the allLogs files after splitter Eg. allLogs100.json
 const STARTING_NUM = 100;
 
 const helpers = {};
 
+// method to get current HeadFile Number
 const getHeadFileNum = async () => {
-  const num = await fs.readFileSync(path.resolve(__dirname, "../data/headFileNum.json"), "utf8");
-  return num;
+  // read current headFileNum from headFileNum.json file
+  const currentHeadFileNum = await fs.readFileSync(path.resolve(__dirname, "../data/headFileNum.json"), "utf8");
+
+  return currentHeadFileNum;
 };
 
-const updateHeadFileNum = async (num) => {
-  fs.writeFileSync(path.resolve(__dirname, '../data/headFileNum.json'), JSON.parse(num), 'utf8');
+// method to update headFileNum back to headFileNum.json
+const updateHeadFileNum = async (fileNum) => {
+  // write file Number to headFileNum.json file
+  fs.writeFileSync(path.resolve(__dirname, '../data/headFileNum.json'), JSON.parse(fileNum), 'utf8');
 };
 
+// method increment currentHeadFileNum by one
 const incrementFileNum = async () => {
+  // get current headFileNum
   const currentFileNum = await getHeadFileNum();
+
+  // increment headFileNum by one
   updateHeadFileNum(parseInt(currentFileNum, 10) + 1);
 };
 
+// method to get the current size of allLogs.json file
 helpers.getFileSize = async () => {
-  // get the current size of the file and save in res.locals.stats
+  // get the stats of the allLogs.json
   const fileStats = await fs.statSync(path.resolve(__dirname, '../data/allLogs.json'));
+
+  // return the size of the file
   return fileStats.size;
 };
-// middlware to rename allLogs.json file to allLogs{fileTracker} format
+
+// method rename allLogs.json file to allLogs{headFileNum}.json format
 helpers.splitFile = async (size) => {
   let fileSplit = false;
   const currentFileNum = await getHeadFileNum();
+
   // if the current file size is bigger than fileLimit value
   if (size > FILE_LIMIT) {
-    // set the res.locals.fileSplit to true
+    // set the fileSplit to true
     fileSplit = true;
-    // rename the current allLogs.json file to allLogs{fileTracker} format
+
+    // rename the current allLogs.json file to allLogs{fheadFileNum}.json format
     await fs.rename(path.resolve(__dirname, '../data/allLogs.json'), path.resolve(__dirname, `../data/allLogs${currentFileNum}.json`), () => {
       console.log('new file created');
     });
 
+    // overwrite the allLogs.json file with empty array
     await fs.writeFileSync(path.resolve(__dirname, '../data/allLogs.json'), JSON.stringify([]), 'utf8');
+
     // increment the fileTracker by one
     incrementFileNum();
   }
   return fileSplit;
 };
 
-// middleware to delete all old logs
+// method to delete all old logs
 helpers.deleteOldLogs = async () => {
+  // read the current value of headFileNum
   const headFile = await getHeadFileNum();
+
+  // iterate through the STARTING_NUM to headFile
   for (let i = STARTING_NUM; i < headFile; i++) {
     try {
+      // remove the allLogs.json file
       fs.unlinkSync(path.resolve(__dirname, `../data/allLogs${i}.json`));
     } catch (e) {
       console.log(e);
     }
   }
+  // update the headFileNum value with STARTING_NUM
   updateHeadFileNum(STARTING_NUM);
 };
 
+// method to read all logs from allLogs.json file
 helpers.getAllLogs = async () => {
+  // read allLogs.json file and parse JSON data
   const logs = await JSON.parse(
     fs.readFileSync(path.resolve(__dirname, "../data/allLogs.json"), "utf8")
   );
+
+  // error handling
   if (!logs) throw Error("./server/helpers/helpers: getAllLogs: No logs found.");
+
   return logs;
 };
 
+// method to store all incoming logs
 helpers.storeLogs = async (logs) => {
   // get the current size of allLogs.json file
   const fileSize = await helpers.getFileSize();
@@ -77,6 +107,7 @@ helpers.storeLogs = async (logs) => {
 
   let data;
 
+  // error handling if reading allLogs.json file throws an error
   try {
     data = await helpers.getAllLogs();
   } catch (e) {
@@ -118,8 +149,12 @@ helpers.storeLogs = async (logs) => {
   return data;
 };
 
+// method to delete allLog.json file
 helpers.deleteLogs = async () => {
+  // invoke function to delete all old logs. Example: allLogs1xx.json
   helpers.deleteOldLogs();
+
+  // overwrite allLogs.json file with empty array
   const res = await fs.writeFileSync(
     path.resolve(__dirname, "../data/allLogs.json"),
     JSON.stringify([]),
@@ -128,6 +163,7 @@ helpers.deleteLogs = async () => {
   return [];
 };
 
+// method to create allLogs.json file if the file is not present
 helpers.checkLogFile = async () => {
   fs.access(path.resolve(__dirname, "../data/allLogs.json"), (err) => {
     // if there's error write the file
@@ -144,7 +180,5 @@ helpers.checkLogFile = async () => {
     return "log file exist";
   });
 };
-
-// middleware to get size of the allLogs.json file
 
 module.exports = helpers;
