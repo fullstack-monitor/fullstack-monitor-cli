@@ -4,6 +4,10 @@ import { io } from "socket.io-client";
 import {
   Table,
   TableCaption,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import LogTable from "./LogTable/LogTable";
 import { serverPort } from "../../configConstants";
@@ -20,12 +24,14 @@ class App extends Component {
       logs: [],
       showMoreLogInfo: false, // switch every time you clickit
       activeLog: {},
+      // logTypes object determines which types of logs render on the page
       logTypes: {
         client: true,
         server: true,
         request: true,
         response: true,
       },
+      // checkBoxes values are used for the custom tab
       checkBoxes: {
         client: true,
         server: true,
@@ -33,6 +39,7 @@ class App extends Component {
         response: true,
       },
       showCustom: false,
+      displayConnectionError: false
     };
   }
 
@@ -40,6 +47,9 @@ class App extends Component {
     const { socket } = this.state;
     socket.on("display-logs", (msg) => {
       this.updateLogState(msg.allLogs);
+    });
+    socket.on('connect_error', () => {
+      this.setState({ displayConnectionError: true });
     });
     socket.emit("get-initial-logs");
   }
@@ -82,6 +92,7 @@ class App extends Component {
   filterLogs = (type) => {
     const { checkBoxes } = this.state;
     switch (type) {
+      // If the user selects the all tab, set all log types to true
       case "all":
         this.setState({
           logTypes: {
@@ -93,6 +104,7 @@ class App extends Component {
           showCustom: false,
         });
         break;
+      // Otherwise set logTypes to true just for the specified log type
       case "client":
       case "server":
       case "request":
@@ -104,6 +116,7 @@ class App extends Component {
           showCustom: false,
         });
         break;
+      // If the user selects the custom tab, set logTypes to be equal to the value of checkBoxes
       case "custom":
         this.setState({
           logTypes: checkBoxes,
@@ -131,9 +144,20 @@ class App extends Component {
       logTypes,
       checkBoxes,
       activeLog,
+      displayConnectionError
     } = this.state;
     return (
       <div>
+        { displayConnectionError
+          && (
+          <Alert status="error">
+            <AlertIcon />
+            <AlertTitle mr={2}>Failed to connect the server.</AlertTitle>
+            <AlertDescription>
+              There was a problem connecting to the Fullstack-Monitor-CLI Server
+            </AlertDescription>
+          </Alert>
+          )}
         <IntelligentHeader
           filterLogs={this.filterLogs}
           deleteLogs={this.deleteLogs}
