@@ -1,5 +1,4 @@
-![](./images/Fullstack-Monitor-CLI-banner.jpeg)
-
+<img src="https://raw.githubusercontent.com/PFA-Pink-Fairy-Armadillo/fullstack-monitor-cli/main/images/Fullstack-Monitor-CLI-banner.jpeg" alt="">
 
 - [About](#about)
   - [Browser Interface](#browser-interface)
