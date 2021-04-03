@@ -55,14 +55,23 @@ print_intro() {
     -c, --chrome                      Listen to the traffic in the chrome
     -k, --kill                        Kill the server
     -r, --restart                     Restart the server
+    -st, --status                     Check the server status
     -sl, --start-listen               Start the server and listen in the terminal
     -slc, --start-listen-chrome       Start the server and listen in the chrome browser
     -slb, --start-listen-both         Start the server and listen in the terminal and chrome browser
   "
 }
 
-kill_server() {
+is_server_up() {
   if lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+kill_server() {
+  if is_server_up; then
     pkill -f server/index.js
     echo 'Server shut down.'
   else
@@ -70,8 +79,16 @@ kill_server() {
   fi
 }
 
+check_server_status() {
+  if is_server_up; then
+    echo 'Server is running on http://localhost:3861/'
+  else
+    echo "Server is shutdown."
+  fi
+}
+
 start_server() {
-  if lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+  if is_server_up; then
     echo "Server is already running."
   else
     node server/index.js &
@@ -79,10 +96,13 @@ start_server() {
   fi
 }
 
-listen_in_terminal() {
-  if ! lsof -Pi :3861 -sTCP:LISTEN -t >/dev/null ; then
+start_server_if_offline() {
+  if ! is_server_up; then
     start_server
   fi
+}
+
+listen_in_terminal() {
   echo 'Listening on port: http://localhost:3861/'
   node server/cmdApp/cmd.js;
 }
@@ -94,6 +114,7 @@ open_chrome() {
 
 
 if [[ $1 == '--listen' || $1 == '-l' || $2 == '--listen' || $2 == '-l' ]]; then
+  start_server_if_offline
   listen_in_terminal
 elif [[ $1 == '--kill' || $1 == '-k'  || $2 == '--kill' || $2 == '-k' ]]; then
   kill_server
@@ -102,6 +123,8 @@ elif [[ $1 == '--restart' || $1 == '-r' || $2 == '--restart' || $2 == '-r' ]]; t
   start_server
 elif [[ $1 == '--start' || $1 == '-s' || $2 == '--start' || $2 == '-s'  ]]; then
   start_server
+elif [[ $1 == '--status' || $1 == '-st' || $2 == '--status' || $2 == '-st'  ]]; then
+  check_server_status
 elif [[ $1 == '--chrome' || $1 == '-c' || $2 == '--chrome' || $2 == '-c'  ]]; then
   open_chrome
 elif [[ $1 == '--tutorial' || $1 == '-t' || $2 == '--tutorial' || $2 == '-t'  ]]; then
